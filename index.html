@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohammad Abdul Faridajalal - Portfolio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="theme-toggle">
+            <button id="theme-toggle-btn">
+                <span class="light-icon">🌞</span>
+                <span class="dark-icon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="profile-photo-container">
+                <img id="profile-photo" src="assets/profile.jpg" alt="Mohammad Abdul Faridajalal">
+                <div class="edit-overlay" data-field="profile-photo">✏️</div>
+            </div>
+            <div class="hero-content">
+                <h1 class="editable" data-field="name">Mohammad Abdul Faridajalal</h1>
+                <h2 class="editable" data-field="title">Azure DevOps Engineer & Site Reliability Engineer (SRE)</h2>
+                <div class="contact-info">
+                    <p class="editable" data-field="location">Newark, Delaware</p>
+                    <p class="editable" data-field="email">mdfaridajalal@gmail.com</p>
+                    <p class="editable" data-field="phone">+1 551 245 2594</p>
+                    <p class="editable" data-field="linkedin">https://www.linkedin.com/in/faridajalalmd</p>
+                </div>
+                <button id="contact-btn" class="btn">Contact Me</button>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <p class="editable" data-field="about-1">Experienced Azure DevOps & SRE engineer with 6 years in cloud solutions, CI/CD, and infrastructure automation.</p>
+                <p class="editable" data-field="about-2">Proven expertise in Azure, AWS, GCP, Terraform, Docker, and Kubernetes.</p>
+                <p class="editable" data-field="about-3">Passionate about reliability engineering, reducing toil, and empowering developer velocity.</p>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="experience">
+            <h2>Experience</h2>
+            <div class="experience-item">
+                <h3 class="editable" data-field="exp-1-title">Accenture (Shell)</h3>
+                <p class="editable" data-field="exp-1-date">2021–2023</p>
+                <p class="editable" data-field="exp-1-desc">Built dashboards, Terraform alerting, Kafka pipelines, 30% false positive reduction, on-call support</p>
+            </div>
+            <div class="experience-item">
+                <h3 class="editable" data-field="exp-2-title">Capgemini (HCSC)</h3>
+                <p class="editable" data-field="exp-2-date">2019–2021</p>
+                <p class="editable" data-field="exp-2-desc">CI/CD with Jenkins, PowerShell, IIS, SQL, GitHub repos, runbooks, reduced 80% manual work</p>
+            </div>
+            <div class="experience-item">
+                <h3 class="editable" data-field="exp-3-title">Cognizant (Instagram)</h3>
+                <p class="editable" data-field="exp-3-date">2017–2019</p>
+                <p class="editable" data-field="exp-3-desc">Kubernetes, Docker, app support, 100+ incidents/year, optimized cloud performance</p>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="skills">
+            <h2>Skills</h2>
+            <div class="skills-group">
+                <h3>Cloud</h3>
+                <p class="editable" data-field="skills-cloud">Azure, AWS, GCP</p>
+            </div>
+            <div class="skills-group">
+                <h3>CI/CD</h3>
+                <p class="editable" data-field="skills-cicd">Jenkins, GitHub Actions, Terraform</p>
+            </div>
+            <div class="skills-group">
+                <h3>Monitoring</h3>
+                <p class="editable" data-field="skills-monitoring">Grafana, Prometheus, Splunk, Dynatrace</p>
+            </div>
+            <div class="skills-group">
+                <h3>Scripting</h3>
+                <p class="editable" data-field="skills-scripting">Python, Bash, PowerShell</p>
+            </div>
+            <div class="skills-group">
+                <h3>Containers</h3>
+                <p class="editable" data-field="skills-containers">Docker, Kubernetes, AKS</p>
+            </div>
+        </section>
+
+        <!-- Certifications Section -->
+        <section class="certifications">
+            <h2>Certifications</h2>
+            <p class="editable" data-field="certifications">AZ-900, AZ-204, AZ-400, DP-203, Terraform Associate, CyberArk Trustee</p>
+        </section>
+
+        <!-- Education Section -->
+        <section class="education">
+            <h2>Education</h2>
+            <div class="education-item">
+                <p class="editable" data-field="edu-1">Master's in Tech Management – University of Delaware (2024)</p>
+            </div>
+            <div class="education-item">
+                <p class="editable" data-field="edu-2">B.Tech in ECE – JNTU (2017)</p>
+            </div>
+        </section>
+
+        <!-- DORA Metrics Section -->
+        <section class="dora-metrics">
+            <h2>DORA Metrics</h2>
+            <div class="charts-container">
+                <div class="chart-wrapper">
+                    <h3>Deployment Frequency</h3>
+                    <canvas id="deploymentChart"></canvas>
+                </div>
+                <div class="chart-wrapper">
+                    <h3>Lead Time</h3>
+                    <canvas id="leadTimeChart"></canvas>
+                </div>
+                <div class="chart-wrapper">
+                    <h3>MTTR</h3>
+                    <canvas id="mttrChart"></canvas>
+                </div>
+                <div class="chart-wrapper">
+                    <h3>Change Failure Rate</h3>
+                    <canvas id="changeFailureChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Contact Information</h2>
+            <p><strong>Email:</strong> <span class="editable" data-field="contact-email">mdfaridajalal@gmail.com</span></p>
+            <p><strong>Phone:</strong> <span class="editable" data-field="contact-phone">+1 551 245 2594</span></p>
+            <p><strong>LinkedIn:</strong> <span class="editable" data-field="contact-linkedin">https://linkedin.com/in/faridajalalmd</span></p>
+        </div>
+    </div>
+
+    <!-- Admin Toolbar -->
+    <div id="admin-toolbar" class="hidden">
+        <p>Admin Mode Active</p>
+    </div>
+
+    <!-- Photo Upload Modal -->
+    <div id="photo-upload-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Update Profile Photo</h2>
+            <input type="file" id="photo-upload" accept="image/*">
+            <div class="modal-buttons">
+                <button id="save-photo" class="btn">Save</button>
+                <button id="cancel-photo" class="btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
