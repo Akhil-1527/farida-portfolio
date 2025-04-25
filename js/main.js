@@ -1,4 +1,14 @@
-// main.js - Core functionality for Mohammad Abdul Faridajalal's portfolio website
+/**
+ * main.js - Core functionality for portfolio website
+ * 
+ * Handles:
+ * - Theme toggling
+ * - Mobile menu
+ * - Chart initialization
+ * - Contact modal
+ * - Skill cards interaction
+ * - Smooth scrolling
+ */
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize theme from localStorage
@@ -13,11 +23,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Setup contact modal
     setupContactModal();
     
+    // Setup skill cards interaction
+    setupSkillCards();
+    
+    // Setup smooth scrolling
+    setupSmoothScrolling();
+    
     // Check if in admin mode and initialize if needed
     checkAdminMode();
 });
 
-// Theme Toggle Functionality
+/**
+ * Theme Toggle Functionality
+ * Switches between light and dark theme
+ */
 function initializeTheme() {
     const themeToggle = document.querySelector('.theme-toggle');
     const currentTheme = localStorage.getItem('theme') || 'light';
@@ -50,10 +69,15 @@ function initializeTheme() {
     });
 }
 
-// Mobile Menu Functionality
+/**
+ * Mobile Menu Functionality
+ * Toggles mobile menu on small screens
+ */
 function setupMobileMenu() {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
+    
+    if (!mobileMenuBtn || !navLinks) return;
     
     mobileMenuBtn.addEventListener('click', function() {
         // Toggle navigation links visibility
@@ -77,13 +101,18 @@ function setupMobileMenu() {
             
             // Reset icon to bars
             const icon = mobileMenuBtn.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
+            if (icon) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
         });
     });
 }
 
-// Initialize DORA Metrics Charts
+/**
+ * Initialize DORA Metrics Charts
+ * Creates and updates the performance charts
+ */
 function initializeDoraMetrics() {
     // Get metrics data from localStorage or use default values
     const metricsData = getMetricsData();
@@ -97,85 +126,94 @@ function initializeDoraMetrics() {
     if (window.failureChart) window.failureChart.destroy();
     
     // Deployment Frequency Chart (Bar Chart)
-    const deploymentCtx = document.getElementById('deploymentChart').getContext('2d');
-    window.deploymentChart = new Chart(deploymentCtx, {
-        type: 'bar',
-        data: {
-            labels: metricsData.deployment.labels,
-            datasets: [{
-                label: 'Deployments',
-                data: metricsData.deployment.data,
-                backgroundColor: chartColors.deployment.background,
-                borderColor: chartColors.deployment.border,
-                borderWidth: 2
-            }]
-        },
-        options: getChartOptions('Weekly Deployments')
-    });
+    const deploymentCtx = document.getElementById('deploymentChart');
+    if (deploymentCtx) {
+        window.deploymentChart = new Chart(deploymentCtx.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: metricsData.deployment.labels,
+                datasets: [{
+                    label: 'Deployments',
+                    data: metricsData.deployment.data,
+                    backgroundColor: chartColors.deployment.background,
+                    borderColor: chartColors.deployment.border,
+                    borderWidth: 2
+                }]
+            },
+            options: getChartOptions('Weekly Deployments')
+        });
+    }
     
     // Mean Time to Recovery Chart (Bar Chart)
-    const recoveryCtx = document.getElementById('recoveryChart').getContext('2d');
-    window.recoveryChart = new Chart(recoveryCtx, {
-        type: 'bar',
-        data: {
-            labels: metricsData.recovery.labels,
-            datasets: [{
-                label: 'MTTR (minutes)',
-                data: metricsData.recovery.data,
-                backgroundColor: chartColors.recovery.background,
-                borderColor: chartColors.recovery.border,
-                borderWidth: 2
-            }]
-        },
-        options: getChartOptions('Recovery Time (min)')
-    });
+    const recoveryCtx = document.getElementById('recoveryChart');
+    if (recoveryCtx) {
+        window.recoveryChart = new Chart(recoveryCtx.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: metricsData.recovery.labels,
+                datasets: [{
+                    label: 'MTTR (minutes)',
+                    data: metricsData.recovery.data,
+                    backgroundColor: chartColors.recovery.background,
+                    borderColor: chartColors.recovery.border,
+                    borderWidth: 2
+                }]
+            },
+            options: getChartOptions('Recovery Time (min)')
+        });
+    }
     
     // Change Failure Rate Chart (Doughnut Chart)
-    const failureCtx = document.getElementById('failureChart').getContext('2d');
-    window.failureChart = new Chart(failureCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Success Rate', 'Failure Rate'],
-            datasets: [{
-                data: [100 - metricsData.failure.current, metricsData.failure.current],
-                backgroundColor: [
-                    chartColors.failure.success,
-                    chartColors.failure.failure
-                ],
-                borderColor: [
-                    chartColors.failure.successBorder,
-                    chartColors.failure.failureBorder
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                    labels: {
-                        color: getComputedStyle(document.body).getPropertyValue('--text-color')
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return context.label + ': ' + context.formattedValue + '%';
+    const failureCtx = document.getElementById('failureChart');
+    if (failureCtx) {
+        window.failureChart = new Chart(failureCtx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Success Rate', 'Failure Rate'],
+                datasets: [{
+                    data: [100 - metricsData.failure.current, metricsData.failure.current],
+                    backgroundColor: [
+                        chartColors.failure.success,
+                        chartColors.failure.failure
+                    ],
+                    borderColor: [
+                        chartColors.failure.successBorder,
+                        chartColors.failure.failureBorder
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: getComputedStyle(document.body).getPropertyValue('--text-color')
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.formattedValue + '%';
+                            }
                         }
                     }
                 }
             }
-        }
-    });
+        });
+    }
     
     // Update text metrics values
     updateTextMetrics(metricsData);
 }
 
-// Get chart colors based on current theme
+/**
+ * Get chart colors based on current theme
+ * @returns {Object} Colors for different chart elements
+ */
 function getChartColors() {
     const isDark = document.body.getAttribute('data-theme') === 'dark';
     
@@ -197,7 +235,10 @@ function getChartColors() {
     };
 }
 
-// Update text metrics displayed on the dashboard
+/**
+ * Update text metrics displayed on the dashboard
+ * @param {Object} metricsData - The metrics data
+ */
 function updateTextMetrics(metricsData) {
     const deploymentFreq = document.querySelector('[data-field="deployment-frequency"]');
     if (deploymentFreq) {
@@ -215,7 +256,11 @@ function updateTextMetrics(metricsData) {
     }
 }
 
-// Chart Configuration Options for bar and line charts
+/**
+ * Chart Configuration Options for bar and line charts
+ * @param {string} yAxisLabel - Label for Y axis
+ * @returns {Object} Chart.js options
+ */
 function getChartOptions(yAxisLabel) {
     const textColor = getComputedStyle(document.body).getPropertyValue('--text-color');
     const borderColor = getComputedStyle(document.body).getPropertyValue('--border-color');
@@ -257,7 +302,10 @@ function getChartOptions(yAxisLabel) {
     };
 }
 
-// Get metrics data from localStorage or use defaults
+/**
+ * Get metrics data from localStorage or use defaults
+ * @returns {Object} Metrics data for charts
+ */
 function getMetricsData() {
     const storedData = localStorage.getItem('metricsData');
     
@@ -291,43 +339,49 @@ function getMetricsData() {
     return defaultData;
 }
 
-// Setup Contact Modal Functionality
+/**
+ * Setup Contact Modal Functionality
+ * Opens/closes contact info modal
+ */
 function setupContactModal() {
     const contactBtn = document.getElementById('contactBtn');
     const contactModal = document.getElementById('contactModal');
     const closeModal = document.getElementById('closeModal');
     
-    if (contactBtn && contactModal) {
-        // Open modal when contact button is clicked
-        contactBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            contactModal.style.display = 'flex';
-        });
-        
-        // Close modal with X button
-        if (closeModal) {
-            closeModal.addEventListener('click', function() {
-                contactModal.style.display = 'none';
-            });
-        }
-        
-        // Close modal when clicking on overlay (outside the modal)
-        contactModal.addEventListener('click', function(e) {
-            if (e.target === contactModal) {
-                contactModal.style.display = 'none';
-            }
-        });
-        
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && contactModal.style.display === 'flex') {
-                contactModal.style.display = 'none';
-            }
+    if (!contactBtn || !contactModal) return;
+    
+    // Open modal when contact button is clicked
+    contactBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        contactModal.style.display = 'flex';
+    });
+    
+    // Close modal with X button
+    if (closeModal) {
+        closeModal.addEventListener('click', function() {
+            contactModal.style.display = 'none';
         });
     }
+    
+    // Close modal when clicking on overlay (outside the modal)
+    contactModal.addEventListener('click', function(e) {
+        if (e.target === contactModal) {
+            contactModal.style.display = 'none';
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && contactModal.style.display === 'flex') {
+            contactModal.style.display = 'none';
+        }
+    });
 }
 
-// Check if in admin mode
+/**
+ * Check if in admin mode
+ * Initializes admin functionality if URL has admin=true
+ */
 function checkAdminMode() {
     const urlParams = new URLSearchParams(window.location.search);
     const isAdmin = urlParams.get('admin') === 'true';
@@ -342,35 +396,46 @@ function checkAdminMode() {
     }
 }
 
-// Skill cards interaction
-document.querySelectorAll('.skill-card').forEach(card => {
-    card.addEventListener('click', function() {
-        // Toggle details visibility on mobile (as an alternative to hover)
-        if (window.innerWidth <= 768) {
-            const details = this.querySelector('.skill-details');
-            details.style.display = details.style.display === 'flex' ? 'none' : 'flex';
-        }
+/**
+ * Setup skill cards interaction
+ * Shows skill details on hover/click
+ */
+function setupSkillCards() {
+    document.querySelectorAll('.skill-card').forEach(card => {
+        card.addEventListener('click', function() {
+            // Toggle details visibility on mobile (as an alternative to hover)
+            if (window.innerWidth <= 768) {
+                const details = this.querySelector('.skill-details');
+                if (details) {
+                    details.style.display = details.style.display === 'flex' ? 'none' : 'flex';
+                }
+            }
+        });
     });
-});
+}
 
-// Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const targetId = this.getAttribute('href');
-        
-        // Skip for contact button which opens modal
-        if (targetId === '#' || this.id === 'contactBtn') {
-            return;
-        }
-        
-        e.preventDefault();
-        const targetElement = document.querySelector(targetId);
-        
-        if (targetElement) {
-            window.scrollTo({
-                top: targetElement.offsetTop - 80,
-                behavior: 'smooth'
-            });
-        }
+/**
+ * Setup smooth scrolling for navigation links
+ */
+function setupSmoothScrolling() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const targetId = this.getAttribute('href');
+            
+            // Skip for contact button which opens modal
+            if (targetId === '#' || this.id === 'contactBtn') {
+                return;
+            }
+            
+            e.preventDefault();
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
     });
-});
+}
