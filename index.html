@@ -10,12 +10,13 @@
     <title>Mohammad Abdul Faridajalal - Portfolio</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="nav-left">
-                <span class="site-title">Farida's Portfolio</span>
+                <span class="site-title">Farida<span class="accent">Portfolio</span></span>
             </div>
             <div class="nav-right">
                 <a href="#about">About</a>
@@ -24,13 +25,16 @@
                 <a href="#certifications">Certifications</a>
                 <a href="#education">Education</a>
                 <a href="#dora-metrics">Metrics</a>
-                <a href="mailto:mdfaridajalal@gmail.com" title="Email">📧</a>
-                <a href="tel:+15512452594" title="Phone">📞</a>
-                <a href="https://www.linkedin.com/in/faridajalalmd" target="_blank" title="LinkedIn">🔗</a>
-                <button id="theme-toggle-btn" class="theme-btn">
-                    <span class="light-icon">🌞</span>
-                    <span class="dark-icon">🌙</span>
+                <button id="contact-btn" class="contact-nav-btn">Contact</button>
+                <button id="theme-toggle-btn" class="theme-btn" aria-label="Toggle theme">
+                    <i class="fas fa-sun light-icon"></i>
+                    <i class="fas fa-moon dark-icon"></i>
                 </button>
+            </div>
+            <div class="menu-toggle">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
             </div>
         </nav>
     </header>
@@ -38,26 +42,26 @@
     <main>
         <!-- Hero Section -->
         <section class="hero">
-            <div class="profile-photo-container">
-                <img id="profile-photo" src="assets/profile.jpg" alt="Mohammad Abdul Faridajalal" loading="lazy">
-                <div class="edit-overlay" data-field="profile-photo">✏️</div>
-            </div>
             <div class="hero-content">
-                <h1 class="editable" data-field="name">Mohammad Abdul Faridajalal</h1>
-                <h2 class="editable" data-field="title">Azure DevOps Engineer & Site Reliability Engineer (SRE)</h2>
-                <div class="contact-info">
-                    <p class="editable" data-field="location">Newark, Delaware</p>
-                    <p class="editable" data-field="email">mdfaridajalal@gmail.com</p>
-                    <p class="editable" data-field="phone">+1 551 245 2594</p>
-                    <p class="editable" data-field="linkedin">https://www.linkedin.com/in/faridajalalmd</p>
+                <h1 class="editable animate-text" data-field="name">Mohammad Abdul Faridajalal</h1>
+                <h2 class="editable animate-text" data-field="title">Azure DevOps Engineer & Site Reliability Engineer (SRE)</h2>
+                <div class="location-badge editable" data-field="location">
+                    <i class="fas fa-map-marker-alt"></i> Newark, Delaware
                 </div>
-                <button id="contact-btn" class="btn">Contact Me</button>
+                <button id="hero-contact-btn" class="btn">Get In Touch</button>
+            </div>
+            <div class="profile-photo-container">
+                <div class="profile-border"></div>
+                <img id="profile-photo" src="assets/profile.jpg" alt="Mohammad Abdul Faridajalal" loading="lazy">
+                <div class="edit-overlay" data-field="profile-photo">
+                    <i class="fas fa-edit"></i>
+                </div>
             </div>
         </section>
 
         <!-- About Section -->
         <section id="about" class="about">
-            <h2>About Me</h2>
+            <h2><span class="section-icon"><i class="fas fa-user"></i></span> About Me</h2>
             <div class="about-content">
                 <p class="editable" data-field="about-1">Experienced Azure DevOps & SRE engineer with 6 years in cloud solutions, CI/CD, and infrastructure automation.</p>
                 <p class="editable" data-field="about-2">Proven expertise in Azure, AWS, GCP, Terraform, Docker, and Kubernetes.</p>
@@ -67,69 +71,137 @@
 
         <!-- Experience Section -->
         <section id="experience" class="experience">
-            <h2>Experience</h2>
-            <div class="experience-item">
-                <h3 class="editable" data-field="exp-1-title">Accenture (Shell)</h3>
-                <p class="editable" data-field="exp-1-date">2021–2023</p>
-                <p class="editable" data-field="exp-1-desc">Built dashboards, Terraform alerting, Kafka pipelines, 30% false positive reduction, on-call support</p>
-            </div>
-            <div class="experience-item">
-                <h3 class="editable" data-field="exp-2-title">Capgemini (HCSC)</h3>
-                <p class="editable" data-field="exp-2-date">2019–2021</p>
-                <p class="editable" data-field="exp-2-desc">CI/CD with Jenkins, PowerShell, IIS, SQL, GitHub repos, runbooks, reduced 80% manual work</p>
-            </div>
-            <div class="experience-item">
-                <h3 class="editable" data-field="exp-3-title">Cognizant (Instagram)</h3>
-                <p class="editable" data-field="exp-3-date">2017–2019</p>
-                <p class="editable" data-field="exp-3-desc">Kubernetes, Docker, app support, 100+ incidents/year, optimized cloud performance</p>
+            <h2><span class="section-icon"><i class="fas fa-briefcase"></i></span> Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date editable" data-field="exp-1-date">2021–2023</div>
+                    <div class="timeline-content">
+                        <h3 class="editable" data-field="exp-1-title">Accenture (Shell)</h3>
+                        <p class="editable" data-field="exp-1-desc">Built dashboards, Terraform alerting, Kafka pipelines, 30% false positive reduction, on-call support</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date editable" data-field="exp-2-date">2019–2021</div>
+                    <div class="timeline-content">
+                        <h3 class="editable" data-field="exp-2-title">Capgemini (HCSC)</h3>
+                        <p class="editable" data-field="exp-2-desc">CI/CD with Jenkins, PowerShell, IIS, SQL, GitHub repos, runbooks, reduced 80% manual work</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date editable" data-field="exp-3-date">2017–2019</div>
+                    <div class="timeline-content">
+                        <h3 class="editable" data-field="exp-3-title">Cognizant (Instagram)</h3>
+                        <p class="editable" data-field="exp-3-desc">Kubernetes, Docker, app support, 100+ incidents/year, optimized cloud performance</p>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- Skills Section -->
         <section id="skills" class="skills">
-            <h2>Skills</h2>
-            <div class="skills-group">
-                <h3>Cloud</h3>
-                <p class="editable" data-field="skills-cloud">Azure, AWS, GCP</p>
-            </div>
-            <div class="skills-group">
-                <h3>CI/CD</h3>
-                <p class="editable" data-field="skills-cicd">Jenkins, GitHub Actions, Terraform</p>
-            </div>
-            <div class="skills-group">
-                <h3>Monitoring</h3>
-                <p class="editable" data-field="skills-monitoring">Grafana, Prometheus, Splunk, Dynatrace</p>
-            </div>
-            <div class="skills-group">
-                <h3>Scripting</h3>
-                <p class="editable" data-field="skills-scripting">Python, Bash, PowerShell</p>
-            </div>
-            <div class="skills-group">
-                <h3>Containers</h3>
-                <p class="editable" data-field="skills-containers">Docker, Kubernetes, AKS</p>
+            <h2><span class="section-icon"><i class="fas fa-code"></i></span> Skills</h2>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3><i class="fas fa-cloud"></i> Cloud</h3>
+                    <div class="skill-icons">
+                        <div class="skill-icon azure" title="Azure"><i class="fab fa-microsoft"></i></div>
+                        <div class="skill-icon aws" title="AWS"><i class="fab fa-aws"></i></div>
+                        <div class="skill-icon gcp" title="GCP"><i class="fab fa-google"></i></div>
+                    </div>
+                    <p class="editable skill-text" data-field="skills-cloud">Azure, AWS, GCP</p>
+                </div>
+                <div class="skill-category">
+                    <h3><i class="fas fa-sync-alt"></i> CI/CD</h3>
+                    <div class="skill-icons">
+                        <div class="skill-icon jenkins" title="Jenkins"><i class="fab fa-jenkins"></i></div>
+                        <div class="skill-icon github" title="GitHub Actions"><i class="fab fa-github"></i></div>
+                        <div class="skill-icon terraform" title="Terraform"><i class="fas fa-cube"></i></div>
+                    </div>
+                    <p class="editable skill-text" data-field="skills-cicd">Jenkins, GitHub Actions, Terraform</p>
+                </div>
+                <div class="skill-category">
+                    <h3><i class="fas fa-chart-line"></i> Monitoring</h3>
+                    <div class="skill-icons">
+                        <div class="skill-icon grafana" title="Grafana"><i class="fas fa-chart-area"></i></div>
+                        <div class="skill-icon prometheus" title="Prometheus"><i class="fas fa-fire"></i></div>
+                        <div class="skill-icon splunk" title="Splunk"><i class="fas fa-search"></i></div>
+                    </div>
+                    <p class="editable skill-text" data-field="skills-monitoring">Grafana, Prometheus, Splunk, Dynatrace</p>
+                </div>
+                <div class="skill-category">
+                    <h3><i class="fas fa-terminal"></i> Scripting</h3>
+                    <div class="skill-icons">
+                        <div class="skill-icon python" title="Python"><i class="fab fa-python"></i></div>
+                        <div class="skill-icon bash" title="Bash"><i class="fas fa-terminal"></i></div>
+                        <div class="skill-icon powershell" title="PowerShell"><i class="fab fa-windows"></i></div>
+                    </div>
+                    <p class="editable skill-text" data-field="skills-scripting">Python, Bash, PowerShell</p>
+                </div>
+                <div class="skill-category">
+                    <h3><i class="fas fa-box"></i> Containers</h3>
+                    <div class="skill-icons">
+                        <div class="skill-icon docker" title="Docker"><i class="fab fa-docker"></i></div>
+                        <div class="skill-icon kubernetes" title="Kubernetes"><i class="fas fa-dharmachakra"></i></div>
+                        <div class="skill-icon aks" title="AKS"><i class="fas fa-server"></i></div>
+                    </div>
+                    <p class="editable skill-text" data-field="skills-containers">Docker, Kubernetes, AKS</p>
+                </div>
             </div>
         </section>
 
         <!-- Certifications Section -->
         <section id="certifications" class="certifications">
-            <h2>Certifications</h2>
-            <p class="editable" data-field="certifications">AZ-900, AZ-204, AZ-400, DP-203, Terraform Associate, CyberArk Trustee</p>
+            <h2><span class="section-icon"><i class="fas fa-certificate"></i></span> Certifications</h2>
+            <div class="cert-container">
+                <div class="cert-badge">
+                    <i class="fab fa-microsoft"></i>
+                    <span>AZ-900</span>
+                </div>
+                <div class="cert-badge">
+                    <i class="fab fa-microsoft"></i>
+                    <span>AZ-204</span>
+                </div>
+                <div class="cert-badge">
+                    <i class="fab fa-microsoft"></i>
+                    <span>AZ-400</span>
+                </div>
+                <div class="cert-badge">
+                    <i class="fab fa-microsoft"></i>
+                    <span>DP-203</span>
+                </div>
+                <div class="cert-badge">
+                    <i class="fas fa-cube"></i>
+                    <span>Terraform</span>
+                </div>
+                <div class="cert-badge">
+                    <i class="fas fa-lock"></i>
+                    <span>CyberArk</span>
+                </div>
+            </div>
+            <p class="editable cert-text" data-field="certifications">AZ-900, AZ-204, AZ-400, DP-203, Terraform Associate, CyberArk Trustee</p>
         </section>
 
         <!-- Education Section -->
         <section id="education" class="education">
-            <h2>Education</h2>
-            <div class="education-item">
-                <p class="editable" data-field="edu-1">Master's in Tech Management – University of Delaware (2024)</p>
-            </div>
-            <div class="education-item">
-                <p class="editable" data-field="edu-2">B.Tech in ECE – JNTU (2017)</p>
+            <h2><span class="section-icon"><i class="fas fa-graduation-cap"></i></span> Education</h2>
+            <div class="education-cards">
+                <div class="edu-card">
+                    <div class="edu-icon"><i class="fas fa-university"></i></div>
+                    <p class="editable" data-field="edu-1">Master's in Tech Management – University of Delaware (2024)</p>
+                </div>
+                <div class="edu-card">
+                    <div class="edu-icon"><i class="fas fa-university"></i></div>
+                    <p class="editable" data-field="edu-2">B.Tech in ECE – JNTU (2017)</p>
+                </div>
             </div>
         </section>
 
         <!-- DORA Metrics Section -->
         <section id="dora-metrics" class="dora-metrics">
-            <h2>DORA Metrics</h2>
+            <h2><span class="section-icon"><i class="fas fa-chart-simple"></i></span> DORA Metrics</h2>
             <div class="charts-container">
                 <div class="chart-wrapper">
                     <h3>Deployment Frequency</h3>
@@ -151,14 +223,44 @@
         </section>
     </main>
 
+    <footer>
+        <p>© 2025 Mohammad Abdul Faridajalal</p>
+    </footer>
+
     <!-- Contact Modal -->
     <div id="contact-modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Contact Information</h2>
-            <p><strong>Email:</strong> <span class="editable" data-field="contact-email">mdfaridajalal@gmail.com</span></p>
-            <p><strong>Phone:</strong> <span class="editable" data-field="contact-phone">+1 551 245 2594</span></p>
-            <p><strong>LinkedIn:</strong> <span class="editable" data-field="contact-linkedin">https://linkedin.com/in/faridajalalmd</span></p>
+            <button class="modal-close">&times;</button>
+            <h2><i class="fas fa-address-card"></i> Contact Information</h2>
+            <div class="contact-details">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-info">
+                        <h3>Email</h3>
+                        <p class="editable" data-field="email">mdfaridajalal@gmail.com</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-info">
+                        <h3>Phone</h3>
+                        <p class="editable" data-field="phone">+1 551 245 2594</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fab fa-linkedin"></i>
+                    </div>
+                    <div class="contact-info">
+                        <h3>LinkedIn</h3>
+                        <p class="editable" data-field="linkedin">https://linkedin.com/in/faridajalalmd</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -170,12 +272,12 @@
     <!-- Photo Upload Modal -->
     <div id="photo-upload-modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Update Profile Photo</h2>
+            <button class="modal-close">&times;</button>
+            <h2><i class="fas fa-camera"></i> Update Profile Photo</h2>
             <input type="file" id="photo-upload" accept="image/*">
             <div class="modal-buttons">
-                <button id="save-photo" class="btn">Save</button>
-                <button id="cancel-photo" class="btn">Cancel</button>
+                <button id="save-photo" class="btn"><i class="fas fa-save"></i> Save</button>
+                <button id="cancel-photo" class="btn btn-cancel"><i class="fas fa-times"></i> Cancel</button>
             </div>
         </div>
     </div>

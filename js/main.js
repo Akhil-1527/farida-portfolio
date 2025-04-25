@@ -22,6 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Setup navbar scroll effect
     setupNavbarScroll();
+    
+    // Mobile menu toggle
+    setupMobileMenu();
+    
+    // Initialize animations
+    initializeAnimations();
 });
 
 // Theme Toggle
@@ -37,6 +43,11 @@ function setupThemeToggle() {
         
         // Update RGB values for background
         updateRgbValues();
+        
+        // Update chart colors with small delay to ensure CSS vars are updated
+        setTimeout(() => {
+            updateChartColors();
+        }, 50);
     });
 }
 
@@ -56,24 +67,49 @@ function loadThemePreference() {
 
 // Contact Modal
 function setupContactModal() {
-    const contactBtn = document.getElementById('contact-btn');
+    const contactBtns = document.querySelectorAll('#contact-btn, #hero-contact-btn');
     const contactModal = document.getElementById('contact-modal');
-    const closeButton = contactModal.querySelector('.close');
+    const closeButton = contactModal.querySelector('.modal-close');
     
-    contactBtn.addEventListener('click', () => {
-        contactModal.style.display = 'block';
+    contactBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            openModal(contactModal);
+        });
     });
     
     closeButton.addEventListener('click', () => {
-        contactModal.style.display = 'none';
+        closeModal(contactModal);
     });
     
     // Close modal when clicking outside
     window.addEventListener('click', (event) => {
         if (event.target === contactModal) {
-            contactModal.style.display = 'none';
+            closeModal(contactModal);
         }
     });
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && contactModal.style.display === 'block') {
+            closeModal(contactModal);
+        }
+    });
+}
+
+// Open modal with animation
+function openModal(modal) {
+    modal.style.display = 'block';
+    // Trigger reflow
+    modal.offsetHeight;
+    modal.classList.add('active');
+}
+
+// Close modal with animation
+function closeModal(modal) {
+    modal.classList.remove('active');
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300); // Match transition duration
 }
 
 // Load saved content
@@ -93,6 +129,33 @@ function loadSavedContent() {
     if (savedPhoto) {
         document.getElementById('profile-photo').src = savedPhoto;
     }
+}
+
+// Setup mobile menu toggle
+function setupMobileMenu() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navRight = document.querySelector('.nav-right');
+    
+    menuToggle.addEventListener('click', () => {
+        navRight.classList.toggle('active');
+        
+        // Animate the hamburger to X
+        const bars = menuToggle.querySelectorAll('.bar');
+        bars.forEach(bar => bar.classList.toggle('active'));
+    });
+    
+    // Close menu when clicking a link
+    const navLinks = navRight.querySelectorAll('a, button');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (navRight.classList.contains('active')) {
+                navRight.classList.remove('active');
+                
+                const bars = menuToggle.querySelectorAll('.bar');
+                bars.forEach(bar => bar.classList.remove('active'));
+            }
+        });
+    });
 }
 
 // DORA Metrics Charts with Chart.js
@@ -253,14 +316,6 @@ function setupDoraCharts() {
             }
         }
     });
-    
-    // Listen for theme changes to update chart colors
-    document.getElementById('theme-toggle-btn').addEventListener('click', () => {
-        // Wait for the CSS variables to update
-        setTimeout(() => {
-            updateChartColors();
-        }, 50);
-    });
 }
 
 // Update chart colors based on theme
@@ -313,5 +368,45 @@ function setupNavbarScroll() {
         } else {
             navbar.classList.remove('scrolled');
         }
+    });
+}
+
+// Initialize animations for scroll effects
+function initializeAnimations() {
+    // Animate elements when they come into view
+    const animateOnScroll = entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    };
+    
+    // Create an observer for the animation
+    const observer = new IntersectionObserver(animateOnScroll, {
+        root: null,
+        threshold: 0.1,
+        rootMargin: '-50px'
+    });
+    
+    // Observe all timeline items
+    document.querySelectorAll('.timeline-item').forEach(item => {
+        observer.observe(item);
+        // Initial state should be invisible
+        item.classList.remove('visible');
+    });
+    
+    // Observe skill categories
+    document.querySelectorAll('.skill-category').forEach((item, index) => {
+        observer.observe(item);
+        // Add staggered animation delay
+        item.style.transitionDelay = `${index * 0.1}s`;
+    });
+    
+    // Observe certification badges
+    document.querySelectorAll('.cert-badge').forEach((item, index) => {
+        observer.observe(item);
+        // Add staggered animation delay
+        item.style.transitionDelay = `${index * 0.1}s`;
     });
 }
