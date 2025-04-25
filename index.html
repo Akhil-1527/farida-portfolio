@@ -4,254 +4,178 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mohammad Abdul Faridajalal - Azure DevOps | SRE</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
-    <!-- Admin Mode Badge -->
-    <div class="admin-badge">Admin Mode</div>
-
-    <!-- Header Navigation -->
     <header>
-        <div class="container nav-container">
-            <a href="#" class="logo">
-                <img src="./assets/profile.jpg" alt="Mohammad" class="profile-small">
-                Mohammad F.
-            </a>
-            <nav>
-                <button class="mobile-menu-btn" aria-label="Toggle menu">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="nav-links">
-                    <a href="#about">About</a>
-                    <a href="#experience">Experience</a>
-                    <a href="#skills">Skills</a>
-                    <a href="#certifications">Certifications</a>
-                    <a href="#dashboard">DevOps Metrics</a>
-                    <a href="#projects">Projects</a>
-                </div>
-            </nav>
-            <div class="nav-controls">
-                <button class="theme-toggle" aria-label="Toggle dark mode">
-                    <i class="fas fa-moon"></i>
-                </button>
+        <div class="container">
+            <div class="logo">
+                <img src="./assets/profile.jpg" alt="Mohammad Abdul Faridajalal" id="logoImg" class="logo-img">
+                <span class="logo-text editable" data-field="logoText">Mohammad A. Farida</span>
             </div>
+            <nav>
+                <button class="mobile-menu-toggle">
+                    <span class="hamburger"></span>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#skills" class="nav-link">Skills</a></li>
+                    <li><a href="#projects" class="nav-link">Projects</a></li>
+                    <li><a href="#metrics" class="nav-link">Metrics</a></li>
+                    <li><a href="#" id="contactBtn" class="nav-link">Contact</a></li>
+                    <li>
+                        <button id="themeToggle" aria-label="Toggle dark/light mode">
+                            <i class="fas fa-moon"></i>
+                            <i class="fas fa-sun"></i>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container hero-content">
-            <div class="profile-container">
-                <img src="./assets/profile.jpg" alt="Mohammad Abdul Faridajalal" class="profile-photo" id="profilePhoto">
-                <div class="profile-upload" id="profileUpload">
-                    <i class="fas fa-camera"></i>
-                    <input type="file" id="profileInput" accept="image/*" style="display: none;">
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="editable" data-field="heroTitle">Mohammad Abdul Faridajalal</h1>
+                    <h2 class="editable" data-field="heroSubtitle">Azure DevOps Engineer & SRE Specialist</h2>
+                    <p class="editable" data-field="heroDescription">Experienced in cloud infrastructure, automation, and ensuring reliability at scale.</p>
+                    <div class="hero-cta">
+                        <a href="./assets/FaridaResume.pdf" class="btn primary" target="_blank">Download Resume</a>
+                        <a href="./assets/FaridaResume_ats.txt" class="btn secondary" target="_blank">ATS Version</a>
+                    </div>
                 </div>
-            </div>
-            <h1 class="editable" data-field="name">Mohammad Abdul Faridajalal</h1>
-            <h2 class="editable" data-field="title">Azure DevOps | Site Reliability Engineer</h2>
-            <p class="editable" data-field="location">Newark, Delaware</p>
-            <div class="social-links">
-                <a href="https://linkedin.com/in/faridajalalmd" target="_blank" class="editable" data-field="linkedin">
-                    <i class="fab fa-linkedin"></i> LinkedIn
-                </a>
-                <a href="./resume/FaridaResume.pdf" target="_blank" class="editable" data-field="resumePDF">
-                    <i class="fas fa-file-pdf"></i> Resume (PDF)
-                </a>
-                <a href="./resume/FaridaResume_ats.txt" target="_blank" class="editable" data-field="resumeATS">
-                    <i class="fas fa-file-alt"></i> Resume (ATS)
-                </a>
-                <a href="#" id="contactBtn">
-                    <i class="fas fa-envelope"></i> Contact
-                </a>
+                <div class="hero-image">
+                    <div class="profile-container">
+                        <img id="profileImage" src="./assets/profile.jpg" alt="Mohammad Abdul Faridajalal" class="profile-img">
+                        <div id="profileUpload" class="profile-upload hidden">
+                            <label for="imageUpload">
+                                <i class="fas fa-camera"></i>
+                                <span>Update Photo</span>
+                            </label>
+                            <input type="file" id="imageUpload" accept="image/*">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about">
+    <section id="about" class="about">
         <div class="container">
             <h2 class="section-title">About Me</h2>
-            <div class="about-content editable" data-field="about-content">
-                With over 6 years of experience in cloud infrastructure and SRE roles, I specialize in Azure DevOps, Terraform, and Databricks implementations. My expertise spans CI/CD pipeline development, infrastructure automation, and monitoring solutions that drive efficiency and reliability. I'm passionate about implementing scalable cloud architectures and applying SRE principles to ensure high availability and performance in complex environments.
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience">
-        <div class="container">
-            <h2 class="section-title">Experience</h2>
-            <div class="timeline" id="experience-timeline">
-                <div class="timeline-item left">
-                    <div class="timeline-content editable" data-field="experience-1">
-                        <h3>Azure DevOps Engineer</h3>
-                        <div class="date">Accenture (Shell) — 2021–2023</div>
-                        <ul>
-                            <li>Implemented CI/CD pipelines that reduced deployment time by 60% for 10+ microservices</li>
-                            <li>Designed and deployed Azure monitoring solutions that improved MTTR by 40%</li>
-                            <li>Automated infrastructure provisioning using Terraform that increased deployment efficiency by 75%</li>
-                            <li>Implemented disaster recovery solutions that ensured 99.9% system availability</li>
-                        </ul>
-                    </div>
+            <div class="about-content">
+                <div class="about-text editable" data-field="aboutText">
+                    <p>I'm a dedicated Azure DevOps engineer and Site Reliability Engineering (SRE) specialist with over 8 years of experience in the cloud infrastructure space. My focus is on optimizing deployment pipelines, enhancing system reliability, and implementing robust monitoring solutions.</p>
+                    <p>Having worked with enterprise-scale applications, I've developed expertise in containerization, infrastructure as code, and automated testing frameworks. My approach combines technical excellence with business-focused solutions to ensure maximum uptime and performance.</p>
                 </div>
-                <div class="timeline-item right">
-                    <div class="timeline-content editable" data-field="experience-2">
-                        <h3>Site Reliability Engineer</h3>
-                        <div class="date">Capgemini (HCSC) — 2019–2021</div>
-                        <ul>
-                            <li>Developed and maintained monitoring dashboards that improved incident response time by 35%</li>
-                            <li>Implemented automated scaling solutions that optimized resource utilization by 50%</li>
-                            <li>Created documentation and runbooks that reduced onboarding time for new team members</li>
-                            <li>Led troubleshooting efforts that resolved critical production issues with minimal downtime</li>
-                        </ul>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-number editable" data-field="yearsExperience">8+</span>
+                        <span class="stat-label">Years Experience</span>
                     </div>
-                </div>
-                <div class="timeline-item left">
-                    <div class="timeline-content editable" data-field="experience-3">
-                        <h3>Cloud Infrastructure Engineer</h3>
-                        <div class="date">Cognizant (Instagram) — 2017–2019</div>
-                        <ul>
-                            <li>Migrated on-premises applications to Azure cloud, reducing infrastructure costs by 30%</li>
-                            <li>Implemented container orchestration using Kubernetes that improved application scalability</li>
-                            <li>Created automated backup and restore solutions ensuring data integrity and availability</li>
-                            <li>Collaborated with development teams to optimize application performance in cloud environments</li>
-                        </ul>
+                    <div class="stat-item">
+                        <span class="stat-number editable" data-field="projectsCompleted">50+</span>
+                        <span class="stat-label">Projects Completed</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number editable" data-field="certificationsEarned">7</span>
+                        <span class="stat-label">Certifications</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Skills Section -->
-    <section id="skills">
+    <section id="skills" class="skills">
         <div class="container">
-            <h2 class="section-title">Skills</h2>
-            <div class="skills-grid" id="skills-grid">
-                <div class="skill-card editable" data-field="skill-1">
-                    <div class="icon"><i class="fas fa-cloud"></i></div>
-                    <h3>Cloud</h3>
-                    <div class="skill-details">
-                        <p>Azure, AWS, GCP, IaaS, PaaS, Scalability, High Availability</p>
-                        <p>Experience: Implemented multi-region disaster recovery solution for Shell using Azure Site Recovery</p>
-                    </div>
+            <h2 class="section-title">Skills & Expertise</h2>
+            <div class="skills-content">
+                <div class="skill-category">
+                    <h3>Cloud Platforms</h3>
+                    <ul class="skill-list">
+                        <li class="skill-item editable" data-field="skillCloud1">Azure (Expert)</li>
+                        <li class="skill-item editable" data-field="skillCloud2">AWS (Intermediate)</li>
+                        <li class="skill-item editable" data-field="skillCloud3">GCP (Beginner)</li>
+                    </ul>
                 </div>
-                <div class="skill-card editable" data-field="skill-2">
-                    <div class="icon"><i class="fas fa-code-branch"></i></div>
-                    <h3>CI/CD</h3>
-                    <div class="skill-details">
-                        <p>Azure DevOps, Jenkins, CircleCI, GitLab CI, GitHub Actions</p>
-                        <p>Experience: Built end-to-end CI/CD pipelines for microservices architecture at Accenture</p>
-                    </div>
+                <div class="skill-category">
+                    <h3>DevOps Tools</h3>
+                    <ul class="skill-list">
+                        <li class="skill-item editable" data-field="skillDevOps1">Azure DevOps</li>
+                        <li class="skill-item editable" data-field="skillDevOps2">Jenkins</li>
+                        <li class="skill-item editable" data-field="skillDevOps3">GitHub Actions</li>
+                        <li class="skill-item editable" data-field="skillDevOps4">Terraform</li>
+                    </ul>
                 </div>
-                <div class="skill-card editable" data-field="skill-3">
-                    <div class="icon"><i class="fas fa-terminal"></i></div>
-                    <h3>Scripting</h3>
-                    <div class="skill-details">
-                        <p>PowerShell, Bash, Python, Terraform, ARM Templates</p>
-                        <p>Experience: Developed automation scripts for Azure resource management at Capgemini</p>
-                    </div>
+                <div class="skill-category">
+                    <h3>Containers & Orchestration</h3>
+                    <ul class="skill-list">
+                        <li class="skill-item editable" data-field="skillContainers1">Docker</li>
+                        <li class="skill-item editable" data-field="skillContainers2">Kubernetes</li>
+                        <li class="skill-item editable" data-field="skillContainers3">AKS</li>
+                        <li class="skill-item editable" data-field="skillContainers4">Helm</li>
+                    </ul>
                 </div>
-                <div class="skill-card editable" data-field="skill-4">
-                    <div class="icon"><i class="fas fa-chart-line"></i></div>
-                    <h3>Monitoring</h3>
-                    <div class="skill-details">
-                        <p>Azure Monitor, Grafana, Prometheus, ELK Stack, Datadog</p>
-                        <p>Experience: Implemented comprehensive monitoring solution for HCSC's critical applications</p>
-                    </div>
-                </div>
-                <div class="skill-card editable" data-field="skill-5">
-                    <div class="icon"><i class="fas fa-cube"></i></div>
-                    <h3>Containerization</h3>
-                    <div class="skill-details">
-                        <p>Docker, Kubernetes, AKS, Container Registry, Helm</p>
-                        <p>Experience: Deployed Kubernetes clusters for Instagram's microservices architecture</p>
-                    </div>
-                </div>
-                <div class="skill-card editable" data-field="skill-6">
-                    <div class="icon"><i class="fas fa-database"></i></div>
-                    <h3>Databases</h3>
-                    <div class="skill-details">
-                        <p>SQL Server, CosmosDB, Azure SQL, PostgreSQL, MongoDB</p>
-                        <p>Experience: Optimized database performance and implemented high availability solutions</p>
-                    </div>
+                <div class="skill-category">
+                    <h3>Monitoring & SRE</h3>
+                    <ul class="skill-list">
+                        <li class="skill-item editable" data-field="skillSRE1">Prometheus</li>
+                        <li class="skill-item editable" data-field="skillSRE2">Grafana</li>
+                        <li class="skill-item editable" data-field="skillSRE3">Azure Monitor</li>
+                        <li class="skill-item editable" data-field="skillSRE4">SLI/SLO Management</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Certifications Section -->
-    <section id="certifications">
+    <section id="projects" class="projects">
         <div class="container">
-            <h2 class="section-title">Certifications</h2>
-            <div class="certifications" id="certifications-container">
-                <div class="certification-card editable" data-field="cert-1">
-                    <div class="icon"><i class="fab fa-microsoft"></i></div>
-                    <h3>AZ-900</h3>
-                    <div class="date">Azure Fundamentals - 2020</div>
-                </div>
-                <div class="certification-card editable" data-field="cert-2">
-                    <div class="icon"><i class="fab fa-microsoft"></i></div>
-                    <h3>AZ-204</h3>
-                    <div class="date">Azure Developer Associate - 2021</div>
-                </div>
-                <div class="certification-card editable" data-field="cert-3">
-                    <div class="icon"><i class="fab fa-microsoft"></i></div>
-                    <h3>AZ-400</h3>
-                    <div class="date">DevOps Engineer Expert - 2021</div>
-                </div>
-                <div class="certification-card editable" data-field="cert-4">
-                    <div class="icon"><i class="fab fa-microsoft"></i></div>
-                    <h3>DP-203</h3>
-                    <div class="date">Data Engineering on Azure - 2022</div>
-                </div>
-                <div class="certification-card editable" data-field="cert-5">
-                    <div class="icon"><i class="fas fa-cloud"></i></div>
-                    <h3>Terraform</h3>
-                    <div class="date">HashiCorp Certified - 2022</div>
-                </div>
-                <div class="certification-card editable" data-field="cert-6">
-                    <div class="icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>CyberArk</h3>
-                    <div class="date">CyberArk Trustee - 2023</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Dashboard/Metrics Section -->
-    <section id="dashboard">
-        <div class="container">
-            <h2 class="section-title">DevOps Performance Metrics</h2>
-            <div class="dashboard" id="dashboard-container">
-                <div class="dashboard-grid">
-                    <div class="dashboard-card">
-                        <h3>Deployment Frequency</h3>
-                        <p class="metric-value editable" data-field="deployment-frequency">5</p>
-                        <p class="metric-description">deployments/week</p>
-                        <div class="chart-container">
-                            <canvas id="deploymentChart"></canvas>
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title editable" data-field="project1Title">Enterprise CI/CD Pipeline Modernization</h3>
+                    </div>
+                    <div class="project-body">
+                        <p class="project-description editable" data-field="project1Description">Redesigned the deployment pipeline for a large financial services client, reducing deployment time from days to hours while improving stability and enabling automated testing.</p>
+                        <div class="project-tech">
+                            <span class="tech-badge editable" data-field="project1Tech1">Azure DevOps</span>
+                            <span class="tech-badge editable" data-field="project1Tech2">Terraform</span>
+                            <span class="tech-badge editable" data-field="project1Tech3">PowerShell</span>
                         </div>
                     </div>
-                    <div class="dashboard-card">
-                        <h3>Mean Time to Recovery</h3>
-                        <p class="metric-value editable" data-field="mttr">90</p>
-                        <p class="metric-description">minutes</p>
-                        <div class="chart-container">
-                            <canvas id="recoveryChart"></canvas>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title editable" data-field="project2Title">Cloud Migration & Containerization</h3>
+                    </div>
+                    <div class="project-body">
+                        <p class="project-description editable" data-field="project2Description">Led the migration of a legacy application portfolio to Azure, containerizing 15+ applications and implementing Kubernetes for orchestration with zero downtime.</p>
+                        <div class="project-tech">
+                            <span class="tech-badge editable" data-field="project2Tech1">AKS</span>
+                            <span class="tech-badge editable" data-field="project2Tech2">Docker</span>
+                            <span class="tech-badge editable" data-field="project2Tech3">Helm</span>
                         </div>
                     </div>
-                    <div class="dashboard-card">
-                        <h3>Change Failure Rate</h3>
-                        <p class="metric-value editable" data-field="failure-rate">4.3%</p>
-                        <p class="metric-description">of deployments requiring remediation</p>
-                        <div class="chart-container">
-                            <canvas id="failureChart"></canvas>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title editable" data-field="project3Title">SRE Implementation & Monitoring</h3>
+                    </div>
+                    <div class="project-body">
+                        <p class="project-description editable" data-field="project3Description">Established SRE practices for a healthcare client, implementing comprehensive monitoring, alerting, and incident response processes that reduced MTTR by 60%.</p>
+                        <div class="project-tech">
+                            <span class="tech-badge editable" data-field="project3Tech1">Prometheus</span>
+                            <span class="tech-badge editable" data-field="project3Tech2">Grafana</span>
+                            <span class="tech-badge editable" data-field="project3Tech3">Azure Monitor</span>
                         </div>
                     </div>
                 </div>
@@ -259,123 +183,113 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section id="testimonials">
+    <section id="metrics" class="metrics">
         <div class="container">
-            <h2 class="section-title">Testimonials</h2>
-            <div class="testimonials" id="testimonials-container">
-                <div class="testimonial-card editable" data-field="testimonial-1">
-                    <p>"Mohammad is an exceptional DevOps engineer who consistently delivered innovative solutions to complex infrastructure challenges. His expertise in Azure and CI/CD pipelines significantly improved our deployment processes and system reliability."</p>
-                    <div class="author">Sathwika Reguri</div>
-                    <div class="role">Technical Lead, Accenture</div>
-                </div>
-                <div class="testimonial-card editable" data-field="testimonial-2">
-                    <p>"Working with Mohammad was a pleasure. His deep knowledge of cloud technologies and commitment to implementing SRE best practices made him a valuable asset to our team. He's proactive, solution-oriented, and excellent at knowledge sharing."</p>
-                    <div class="author">Malathi Karanam</div>
-                    <div class="role">Team Manager, Capgemini</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Education Section -->
-    <section id="education">
-        <div class="container">
-            <h2 class="section-title">Education</h2>
-            <div class="education" id="education-container">
-                <div class="education-card editable" data-field="education-1">
-                    <h3>Masters in Tech Management</h3>
-                    <div class="institution">University of Delaware</div>
-                    <div class="date">2024</div>
-                    <p>Focused on technology leadership, cloud architecture, and IT strategy</p>
-                </div>
-                <div class="education-card editable" data-field="education-2">
-                    <h3>B.Tech in Electronics and Communication Engineering</h3>
-                    <div class="institution">Jawaharlal Nehru Technological University</div>
-                    <div class="date">2017</div>
-                    <p>Specialized in computer networks and communication systems</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects">
-        <div class="container">
-            <h2 class="section-title">Projects</h2>
-            <div class="projects" id="projects-container">
-                <div class="project-card editable" data-field="project-1">
-                    <h3>Enterprise CI/CD Pipeline Architecture</h3>
-                    <p>Designed and implemented a robust CI/CD pipeline for a large-scale microservices application using Azure DevOps. The solution automated build, test, and deployment processes across multiple environments while enforcing security and compliance requirements.</p>
-                    <div class="tags">
-                        <span class="tag">Azure DevOps</span>
-                        <span class="tag">YAML Pipelines</span>
-                        <span class="tag">Docker</span>
-                        <span class="tag">Kubernetes</span>
-                        <span class="tag">Terraform</span>
+            <h2 class="section-title">DORA Metrics Performance</h2>
+            <p class="metrics-intro editable" data-field="metricsIntro">Track record of improving key DevOps Research and Assessment (DORA) metrics across projects:</p>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h3>Deployment Frequency</h3>
+                    <div class="chart-container">
+                        <canvas id="deploymentFrequencyChart"></canvas>
                     </div>
                 </div>
-                <div class="project-card editable" data-field="project-2">
-                    <h3>Comprehensive Azure Monitoring Solution</h3>
-                    <p>Developed an end-to-end monitoring and alerting system for critical cloud infrastructure using Azure Monitor, Log Analytics, and Application Insights. Implemented custom dashboards, alert rules, and automated remediation workflows that significantly improved system reliability and reduced MTTR.</p>
-                    <div class="tags">
-                        <span class="tag">Azure Monitor</span>
-                        <span class="tag">Log Analytics</span>
-                        <span class="tag">PowerShell</span>
-                        <span class="tag">Logic Apps</span>
-                        <span class="tag">Grafana</span>
+                <div class="metric-card">
+                    <h3>Lead Time for Changes</h3>
+                    <div class="chart-container">
+                        <canvas id="leadTimeChart"></canvas>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <h3>MTTR</h3>
+                    <div class="chart-container">
+                        <canvas id="mttrChart"></canvas>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <h3>Change Failure Rate</h3>
+                    <div class="chart-container">
+                        <canvas id="changeFailureChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Modal -->
-    <div class="contact-modal-overlay" id="contactModal">
-        <div class="contact-modal">
-            <span class="contact-modal-close" id="closeModal">&times;</span>
-            <h2>Contact Information</h2>
-            <div class="contact-modal-content">
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h3>Phone</h3>
-                        <p class="editable" data-field="phone">+1 (302) 555-6789</p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h3>Email</h3>
-                        <p class="editable" data-field="email">faridajalal.dev@gmail.com</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sticky CTA Button -->
-    <div class="sticky-cta">
-        <a href="https://linkedin.com/in/faridajalalmd" class="sticky-cta-btn">Hire Me for Cloud/SRE Roles</a>
-    </div>
-
-    <!-- Export JSON Button (shown in admin mode) -->
-    <button class="export-btn" id="exportBtn" title="Download current edits as JSON backup">Download Data (JSON)</button>
-
-    <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2025 Mohammad Abdul Faridajalal. All rights reserved.</p>
-            <p>Azure DevOps | Site Reliability Engineer | Newark, Delaware</p>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="editable" data-field="footerName">Mohammad Abdul Faridajalal</span>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/" target="_blank" class="social-link editable" data-field="githubLink">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/" target="_blank" class="social-link editable" data-field="linkedinLink">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://twitter.com/" target="_blank" class="social-link editable" data-field="twitterLink">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+                <div class="footer-copyright">
+                    <p class="editable" data-field="copyright">© 2025 Mohammad Abdul Faridajalal. All rights reserved.</p>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Contact Information</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span class="editable" data-field="emailAddress">mohammad.farida@example.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span class="editable" data-field="phoneNumber">+1 (555) 123-4567</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="editable" data-field="location">Seattle, WA</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Tools Section -->
+    <div id="adminTools" class="admin-tools hidden">
+        <div class="admin-bar">
+            <div class="admin-notice">
+                <i class="fas fa-edit"></i> Admin Mode Active
+            </div>
+            <div class="admin-actions">
+                <button id="exportDataBtn" class="btn secondary">
+                    <i class="fas fa-download"></i> Export Data
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="./js/main.js"></script>
-    <script src="./js/admin.js"></script>
+    
+    <!-- Dynamic admin.js loader per non-negotiable requirement -->
+    <script>
+      if (window.location.search.includes("admin=true")) {
+        const script = document.createElement("script");
+        script.src = "./js/admin.js";
+        document.body.appendChild(script);
+        script.onload = () => {
+          if (typeof initializeAdmin === "function") {
+            initializeAdmin();
+          }
+        };
+      }
+    </script>
 </body>
 </html>

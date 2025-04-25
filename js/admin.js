@@ -1,577 +1,351 @@
 /**
- * admin.js - Admin mode functionality for portfolio website
- * 
- * Handles:
- * - Inline editing of all content
- * - Local storage of edits
- * - Edit icons display
- * - Profile photo uploads
- * - JSON data export
+ * admin.js - Admin functionality for Mohammad Abdul Faridajalal's portfolio
+ * Only loaded when ?admin=true is in the URL
+ * Handles inline editing, profile photo upload, and JSON export
  */
 
-// Global variable to track edited fields
-let editedFields = {};
-
-/**
- * Initialize admin functionality
- * Called when ?admin=true is detected in URL
- */
+// Initialize admin mode when function is called from main.js
 function initializeAdmin() {
-    console.log('Admin mode activated');
+    console.log('Admin mode initialized');
     
-    // Show admin badge
-    const adminBadge = document.querySelector('.admin-badge');
-    if (adminBadge) {
-        adminBadge.style.display = 'block';
-    }
+    // Show admin tools bar
+    document.getElementById('adminTools').classList.remove('hidden');
     
-    // Add edit icons to all editable elements
-    addEditIcons();
+    // Initialize editable elements
+    initEditableElements();
     
-    // Setup edit click handlers
-    setupEditHandlers();
+    // Initialize profile photo upload
+    initProfileUpload();
     
-    // Show profile upload button
-    setupProfilePhotoUpload();
+    // Initialize export data functionality
+    initExportData();
     
-    // Show and setup export JSON button
-    setupExportButton();
+    // Apply fade-in animation to admin elements
+    fadeInAdminElements();
+  }
+  
+  /**
+   * Initialize all editable elements with edit icons and click handlers
+   */
+  function initEditableElements() {
+    const editableElements = document.querySelectorAll('.editable');
     
-    // Load content from localStorage
-    loadContentFromLocalStorage();
-}
-
-/**
- * Add edit icons to all editable elements
- */
-function addEditIcons() {
-    document.querySelectorAll('.editable').forEach(el => {
-        // Create edit icon
-        const editIcon = document.createElement('span');
-        editIcon.className = 'edit-icon';
-        editIcon.innerHTML = '✎';
-        
-        // Add to element
-        el.appendChild(editIcon);
-    });
-    
-    // Show Export button
-    const exportBtn = document.getElementById('exportBtn');
-    if (exportBtn) {
-        exportBtn.style.display = 'block';
-    }
-}
-
-/**
- * Setup edit handlers for all editable elements
- */
-function setupEditHandlers() {
-    // Handle edit icons click
-    document.querySelectorAll('.edit-icon').forEach(icon => {
-        icon.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const editableElement = this.parentElement;
-            handleElementEdit(editableElement);
-        });
-    });
-    
-    // Also handle direct editable elements clicking
-    document.querySelectorAll('.editable').forEach(el => {
-        el.addEventListener('click', function(e) {
-            handleElementEdit(this);
-            e.stopPropagation(); // Prevent triggering parent click events
-        });
-    });
-    
-    // Handle section editing (when clicking section title)
-    document.querySelectorAll('.section-title').forEach(title => {
-        // Find the content container that follows this title
-        const sectionId = title.parentElement.parentElement.id;
-        if (sectionId) {
-            // Create and append edit icon
-            const editIcon = document.createElement('span');
-            editIcon.className = 'edit-icon';
-            editIcon.innerHTML = '✎';
-            title.appendChild(editIcon);
-            
-            // Setup click handler
-            editIcon.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const sectionContainer = document.getElementById(sectionId);
-                if (sectionContainer) {
-                    const editableElements = sectionContainer.querySelectorAll('.editable');
-                    if (editableElements.length > 0) {
-                        createEditModal(editableElements, sectionId);
-                    }
-                }
-            });
+    editableElements.forEach(element => {
+      // Create edit icon
+      const editIcon = document.createElement('span');
+      editIcon.className = 'edit-icon';
+      editIcon.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+      
+      // Add edit icon to element
+      element.appendChild(editIcon);
+      
+      // Load saved content from localStorage if available
+      const fieldName = element.getAttribute('data-field');
+      const savedContent = getSavedContent(fieldName);
+      
+      if (savedContent) {
+        if (element.tagName.toLowerCase() === 'img') {
+          element.src = savedContent;
+        } else {
+          element.textContent = savedContent;
         }
+      }
+      
+      // Add click handler for editing
+      editIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        makeElementEditable(element);
+      });
+      
+      // Alternative: double-click on element to edit
+      element.addEventListener('dblclick', () => {
+        makeElementEditable(element);
+      });
     });
-}
-
-/**
- * Handle editing of individual elements
- * @param {HTMLElement} element - The element being edited
- */
-function handleElementEdit(element) {
-    if (!element || !element.classList.contains('editable')) return;
+  }
+  
+  /**
+   * Make an element editable
+   */
+  function makeElementEditable(element) {
+    // Mark element as active
+    element.classList.add('active');
     
-    const currentContent = element.innerHTML;
+    // Get current content
+    const currentContent = element.textContent;
     const fieldName = element.getAttribute('data-field');
     
-    // Remove edit icon for editing
-    const editIcon = element.querySelector('.edit-icon');
-    let editIconHTML = '';
-    if (editIcon) {
-        editIconHTML = editIcon.outerHTML;
-        editIcon.remove();
-    }
+    // Create input based on element type
+    let inputElement;
     
-    // Special handling for contact info and metrics
-    if (fieldName === 'phone' || fieldName === 'email' || fieldName === 'deployment-frequency' || 
-        fieldName === 'mttr' || fieldName === 'failure-rate') {
-        createSimpleInPlaceEditor(element, currentContent, fieldName, editIconHTML);
-        return;
-    }
-    
-    // Standard editor for other elements
-    createInPlaceEditor(element, currentContent, fieldName, editIconHTML);
-}
-
-/**
- * Create simple in-place editor for basic text elements
- * @param {HTMLElement} element - The element being edited
- * @param {string} content - Current content
- * @param {string} fieldName - Field identifier
- * @param {string} editIconHTML - HTML for edit icon
- */
-function createSimpleInPlaceEditor(element, content, fieldName, editIconHTML) {
-    // Get just the text content
-    const textContent = element.textContent.trim();
-    
-    // Create inline editor
-    const editorHTML = `
-        <div class="editor-container">
-            <input type="text" class="editor-input" value="${textContent}">
-            <div class="editor-controls">
-                <button class="editor-save">Save</button>
-                <button class="editor-cancel">Cancel</button>
-            </div>
-        </div>
-    `;
-    
-    // Replace element content with editor
-    element.innerHTML = editorHTML;
-    
-    // Setup save and cancel buttons
-    const saveBtn = element.querySelector('.editor-save');
-    const cancelBtn = element.querySelector('.editor-cancel');
-    
-    saveBtn.addEventListener('click', function() {
-        const newContent = element.querySelector('.editor-input').value;
-        
-        // Special handling for metrics data
-        if (fieldName === 'deployment-frequency' || fieldName === 'mttr' || fieldName === 'failure-rate') {
-            saveMetricValue(fieldName, newContent);
-        } else {
-            // Save to editedFields and localStorage
-            editedFields[fieldName] = newContent;
-            saveToLocalStorage();
-        }
-        
-        // Update element
-        element.innerHTML = newContent + editIconHTML;
-    });
-    
-    cancelBtn.addEventListener('click', function() {
-        // Restore original content
-        element.innerHTML = content;
-    });
-    
-    // Focus on the input
-    const input = element.querySelector('.editor-input');
-    if (input) {
-        input.focus();
-    }
-}
-
-/**
- * Create in-place editor for complex elements
- * @param {HTMLElement} element - The element being edited
- * @param {string} content - Current content
- * @param {string} fieldName - Field identifier
- * @param {string} editIconHTML - HTML for edit icon
- */
-function createInPlaceEditor(element, content, fieldName, editIconHTML) {
-    // Determine editor type based on content complexity
-    let editorHTML;
-    
-    if (content.includes('<h3>') || content.includes('<ul>') || content.includes('<div class="date">') || 
-        content.includes('<p>') && content.includes('<div class="tags">')) {
-        // Complex HTML content - use textarea
-        // Remove edit icon for editing HTML
-        const contentWithoutIcon = content.replace(/<span class="edit-icon">.*?<\/span>/g, '');
-        
-        editorHTML = `
-            <div class="editor-container">
-                <textarea class="editor-textarea">${contentWithoutIcon}</textarea>
-                <div class="editor-controls">
-                    <button class="editor-save">Save</button>
-                    <button class="editor-cancel">Cancel</button>
-                </div>
-            </div>
-        `;
+    if (element.tagName.toLowerCase() === 'p' && element.textContent.length > 80) {
+      // For longer text, use textarea
+      inputElement = document.createElement('textarea');
+      inputElement.rows = 4;
+      inputElement.style.width = '100%';
+      inputElement.style.padding = '8px';
+      inputElement.style.boxSizing = 'border-box';
+      inputElement.value = currentContent;
     } else {
-        // Simple text content - use input
-        const textContent = element.textContent.replace('✎', '').trim();
-        
-        editorHTML = `
-            <div class="editor-container">
-                <input type="text" class="editor-input" value="${textContent}">
-                <div class="editor-controls">
-                    <button class="editor-save">Save</button>
-                    <button class="editor-cancel">Cancel</button>
-                </div>
-            </div>
-        `;
+      // For shorter text, use input
+      inputElement = document.createElement('input');
+      inputElement.type = 'text';
+      inputElement.style.width = '100%';
+      inputElement.style.padding = '8px';
+      inputElement.style.boxSizing = 'border-box';
+      inputElement.value = currentContent;
     }
     
-    // Replace element content with editor
-    element.innerHTML = editorHTML;
+    // Clear element content and add input
+    element.textContent = '';
+    element.appendChild(inputElement);
     
-    // Setup save and cancel buttons
-    const saveBtn = element.querySelector('.editor-save');
-    const cancelBtn = element.querySelector('.editor-cancel');
+    // Focus the input
+    inputElement.focus();
     
-    saveBtn.addEventListener('click', function() {
-        let newContent;
-        
-        if (element.querySelector('.editor-textarea')) {
-            newContent = element.querySelector('.editor-textarea').value;
-        } else {
-            newContent = element.querySelector('.editor-input').value;
-        }
-        
-        // Save to editedFields and localStorage
-        editedFields[fieldName] = newContent;
-        saveToLocalStorage();
-        
-        // Update element with edit icon
-        element.innerHTML = newContent + editIconHTML;
+    // Handle save on blur or Enter key
+    inputElement.addEventListener('blur', () => saveEdit(element, inputElement, fieldName));
+    inputElement.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.tagName.toLowerCase() !== 'textarea') {
+        e.preventDefault();
+        saveEdit(element, inputElement, fieldName);
+      }
+      if (e.key === 'Escape') {
+        cancelEdit(element, currentContent);
+      }
+    });
+  }
+  
+  /**
+   * Save edits to an element
+   */
+  function saveEdit(element, inputElement, fieldName) {
+    const newContent = inputElement.value;
+    
+    // Remove the input
+    element.removeChild(inputElement);
+    
+    // Update the element content
+    element.textContent = newContent;
+    
+    // Re-append the edit icon
+    const editIcon = document.createElement('span');
+    editIcon.className = 'edit-icon';
+    editIcon.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+    element.appendChild(editIcon);
+    
+    // Add click handler for editing
+    editIcon.addEventListener('click', (e) => {
+      e.stopPropagation();
+      makeElementEditable(element);
     });
     
-    cancelBtn.addEventListener('click', function() {
-        // Restore original content
-        element.innerHTML = content;
-    });
+    // Save to localStorage
+    saveContent(fieldName, newContent);
     
-    // Focus on the input/textarea
-    const input = element.querySelector('.editor-textarea') || element.querySelector('.editor-input');
+    // Remove active class
+    element.classList.remove('active');
+    
+    // Update logo image if editing logo text
+    if (fieldName === 'logoText') {
+      updatePageTitle(newContent);
+    }
+  }
+  
+  /**
+   * Cancel edit and restore original content
+   */
+  function cancelEdit(element, originalContent) {
+    // Remove any inputs
+    const input = element.querySelector('input, textarea');
     if (input) {
-        input.focus();
+      element.removeChild(input);
     }
-}
-
-/**
- * Create modal for editing multiple elements
- * @param {NodeList} elements - Collection of editable elements
- * @param {string} sectionId - ID of the section being edited
- */
-function createEditModal(elements, sectionId) {
-    // Create modal element
-    const modal = document.createElement('div');
-    modal.className = 'edit-modal';
     
-    let modalContent = `
-        <div class="edit-modal-content">
-            <span class="edit-modal-close">&times;</span>
-            <h2>Edit ${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)} Section</h2>
-            <div class="edit-modal-form">
-    `;
+    // Restore original content
+    element.textContent = originalContent;
     
-    // Add form fields for each editable element
-    elements.forEach((el, index) => {
-        const fieldName = el.getAttribute('data-field');
-        if (!fieldName) return;
-        
-        // Clean content - remove edit icon
-        let content = el.innerHTML;
-        content = content.replace(/<span class="edit-icon">.*?<\/span>/g, '');
-        
-        const displayName = fieldName.replace(/-/g, ' ')
-            .split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
-            
-        // Determine if we need textarea or input
-        if (content.includes('<h3>') || content.includes('<ul>') || content.includes('<div class="date">') || 
-            content.includes('<p>') && content.includes('<div class="tags">')) {
-            // Complex content
-            modalContent += `
-                <div class="edit-modal-field">
-                    <h3>${displayName}</h3>
-                    <textarea data-field="${fieldName}" rows="6">${content}</textarea>
-                </div>
-            `;
-        } else {
-            // Simple content
-            const textContent = el.textContent.replace('✎', '').trim();
-            modalContent += `
-                <div class="edit-modal-field">
-                    <h3>${displayName}</h3>
-                    <input type="text" data-field="${fieldName}" value="${textContent}">
-                </div>
-            `;
-        }
+    // Re-append the edit icon
+    const editIcon = document.createElement('span');
+    editIcon.className = 'edit-icon';
+    editIcon.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+    element.appendChild(editIcon);
+    
+    // Add click handler for editing
+    editIcon.addEventListener('click', (e) => {
+      e.stopPropagation();
+      makeElementEditable(element);
     });
     
-    // Add save and cancel buttons
-    modalContent += `
-            </div>
-            <div class="edit-modal-controls">
-                <button class="edit-modal-save">Save All</button>
-                <button class="edit-modal-cancel">Cancel</button>
-            </div>
-        </div>
-    `;
-    
-    modal.innerHTML = modalContent;
-    
-    // Add modal to body
-    document.body.appendChild(modal);
-    
-    // Setup event handlers
-    const closeBtn = modal.querySelector('.edit-modal-close');
-    const saveBtn = modal.querySelector('.edit-modal-save');
-    const cancelBtn = modal.querySelector('.edit-modal-cancel');
-    
-    // Close modal function
-    const closeModal = () => document.body.removeChild(modal);
-    
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
-    
-    if (saveBtn) {
-        saveBtn.addEventListener('click', function() {
-            // Save all fields
-            const inputFields = modal.querySelectorAll('input[data-field]');
-            const textareaFields = modal.querySelectorAll('textarea[data-field]');
-            
-            // Process input fields
-            inputFields.forEach(field => {
-                const fieldName = field.getAttribute('data-field');
-                const newContent = field.value;
-                
-                // Save to editedFields and localStorage
-                editedFields[fieldName] = newContent;
-                
-                // Update element on page
-                const pageElement = document.querySelector(`[data-field="${fieldName}"]`);
-                if (pageElement) {
-                    // Preserve edit icon
-                    const editIcon = pageElement.querySelector('.edit-icon');
-                    const editIconHTML = editIcon ? editIcon.outerHTML : '';
-                    pageElement.innerHTML = newContent + editIconHTML;
-                }
-            });
-            
-            // Process textarea fields
-            textareaFields.forEach(field => {
-                const fieldName = field.getAttribute('data-field');
-                const newContent = field.value;
-                
-                // Save to editedFields and localStorage
-                editedFields[fieldName] = newContent;
-                
-                // Update element on page
-                const pageElement = document.querySelector(`[data-field="${fieldName}"]`);
-                if (pageElement) {
-                    // Preserve edit icon
-                    const editIcon = pageElement.querySelector('.edit-icon');
-                    const editIconHTML = editIcon ? editIcon.outerHTML : '';
-                    pageElement.innerHTML = newContent + editIconHTML;
-                }
-            });
-            
-            // Save all changes to localStorage
-            saveToLocalStorage();
-            
-            // Close modal
-            closeModal();
-        });
+    // Remove active class
+    element.classList.remove('active');
+  }
+  
+  /**
+   * Update page title if logo text changes
+   */
+  function updatePageTitle(newTitle) {
+    if (newTitle) {
+      document.title = newTitle + ' - Azure DevOps | SRE';
     }
-}
-
-/**
- * Save metric value and update charts
- * @param {string} fieldName - Metric field name
- * @param {string} value - New value
- */
-function saveMetricValue(fieldName, value) {
-    // Get existing metrics data
-    let metricsData = JSON.parse(localStorage.getItem('metricsData')) || {};
+  }
+  
+  /**
+   * Initialize profile photo upload functionality
+   */
+  function initProfileUpload() {
+    const profileUploadDiv = document.getElementById('profileUpload');
+    const imageUploadInput = document.getElementById('imageUpload');
+    const profileImage = document.getElementById('profileImage');
+    const logoImg = document.getElementById('logoImg');
     
-    // Update the appropriate field
-    if (fieldName === 'deployment-frequency') {
-        metricsData.deploymentFrequency = value;
-    } else if (fieldName === 'mttr') {
-        metricsData.mttr = value;
-    } else if (fieldName === 'failure-rate') {
-        metricsData.failureRate = value;
+    // Show the upload button
+    profileUploadDiv.classList.remove('hidden');
+    
+    // Load saved profile image if available
+    const savedProfileImage = getSavedContent('profileImage');
+    if (savedProfileImage) {
+      profileImage.src = savedProfileImage;
+      if (logoImg) logoImg.src = savedProfileImage;
+    }
+    
+    // Handle file input change
+    imageUploadInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
         
-        // Also update current failure rate for doughnut chart
-        // Remove % if present and convert to number
-        const numericValue = parseFloat(value.replace('%', ''));
-        if (!isNaN(numericValue)) {
-            metricsData.failure.current = numericValue;
+        reader.onload = function(event) {
+          const imageData = event.target.result;
+          
+          // Update main profile image
+          profileImage.src = imageData;
+          
+          // Update logo image if it exists
+          if (logoImg) logoImg.src = imageData;
+          
+          // Save to localStorage
+          saveContent('profileImage', imageData);
+        };
+        
+        reader.readAsDataURL(file);
+      } else {
+        alert('Please select a valid image file.');
+      }
+    });
+  }
+  
+  /**
+   * Initialize export data functionality
+   */
+  function initExportData() {
+    const exportButton = document.getElementById('exportDataBtn');
+    
+    exportButton.addEventListener('click', () => {
+      const exportData = collectAllData();
+      downloadJSON(exportData, 'portfolio_data.json');
+    });
+  }
+  
+  /**
+   * Collect all editable data
+   */
+  function collectAllData() {
+    const data = {};
+    
+    // Collect field data
+    document.querySelectorAll('.editable').forEach(element => {
+      const fieldName = element.getAttribute('data-field');
+      if (fieldName) {
+        if (element.tagName.toLowerCase() === 'img') {
+          data[fieldName] = element.src;
+        } else {
+          data[fieldName] = element.textContent;
         }
+      }
+    });
+    
+    // Add profile image
+    const profileImage = getSavedContent('profileImage');
+    if (profileImage) {
+      data.profileImage = profileImage;
     }
     
-    // Save back to localStorage
-    localStorage.setItem('metricsData', JSON.stringify(metricsData));
-    
-    console.log(`Saved metric value for ${fieldName}: ${value}`);
-    
-    // Refresh charts with new data
-    if (typeof initializeDoraMetrics === 'function') {
-        initializeDoraMetrics();
-    }
-}
-
-/**
- * Setup profile photo upload functionality
- */
-function setupProfilePhotoUpload() {
-    const profileUpload = document.getElementById('profileUpload');
-    const profileInput = document.getElementById('profileInput');
-    const profilePhoto = document.getElementById('profilePhoto');
-    const logoImg = document.querySelector('.logo img');
-    
-    if (profileUpload && profileInput && profilePhoto) {
-        // Show upload button in admin mode
-        profileUpload.style.display = 'flex';
-        
-        // Handle upload button click
-        profileUpload.addEventListener('click', function() {
-            profileInput.click();
-        });
-        
-        // Handle file selection
-        profileInput.addEventListener('change', function() {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                
-                // When file is loaded
-                reader.onload = function(e) {
-                    // Update profile photo
-                    profilePhoto.src = e.target.result;
-                    
-                    // Also update small logo photo if it exists
-                    if (logoImg) {
-                        logoImg.src = e.target.result;
-                    }
-                    
-                    // Save to localStorage
-                    localStorage.setItem('profilePhoto', e.target.result);
-                };
-                
-                // Read the file
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
-        
-        // Load existing profile photo from localStorage
-        const savedPhoto = localStorage.getItem('profilePhoto');
-        if (savedPhoto) {
-            profilePhoto.src = savedPhoto;
-            
-            // Also update small logo photo if it exists
-            if (logoImg) {
-                logoImg.src = savedPhoto;
-            }
-        }
-    }
-}
-
-/**
- * Setup export button functionality
- */
-function setupExportButton() {
-    const exportBtn = document.getElementById('exportBtn');
-    
-    if (exportBtn) {
-        exportBtn.addEventListener('click', function() {
-            // Get data from localStorage
-            const portfolioData = editedFields || {};
-            const metricsData = JSON.parse(localStorage.getItem('metricsData')) || {};
-            const profilePhoto = localStorage.getItem('profilePhoto');
-            
-            // Combine all data
-            const exportData = {
-                timestamp: new Date().toISOString(),
-                portfolioContent: portfolioData,
-                metricsData: metricsData,
-                profilePhoto: profilePhoto
-            };
-            
-            // Create download link
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "portfolio-data.json");
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            document.body.removeChild(downloadAnchor);
-        });
-    }
-}
-
-/**
- * Save all edited fields to localStorage
- */
-function saveToLocalStorage() {
-    localStorage.setItem('portfolioData', JSON.stringify(editedFields));
-    console.log('Saved all changes to localStorage');
-}
-
-/**
- * Load content from localStorage
- */
-function loadContentFromLocalStorage() {
-    // Load portfolio content
-    const portfolioData = JSON.parse(localStorage.getItem('portfolioData'));
-    
-    if (portfolioData) {
-        // Store in editedFields
-        editedFields = portfolioData;
-        
-        // Update all editable elements with stored content
-        Object.keys(portfolioData).forEach(fieldName => {
-            const element = document.querySelector(`[data-field="${fieldName}"]`);
-            
-            if (element) {
-                // Get edit icon if it exists
-                const editIcon = element.querySelector('.edit-icon');
-                const editIconHTML = editIcon ? editIcon.outerHTML : '';
-                
-                // Update content preserving edit icon
-                element.innerHTML = portfolioData[fieldName] + editIconHTML;
-            }
-        });
+    // Add metrics data
+    try {
+      const metricsData = localStorage.getItem('metricsData');
+      if (metricsData) {
+        data.metricsData = JSON.parse(metricsData);
+      }
+    } catch (error) {
+      console.error('Error collecting metrics data:', error);
     }
     
-    // Load profile photo
-    const profilePhoto = localStorage.getItem('profilePhoto');
-    if (profilePhoto) {
-        const photoElement = document.getElementById('profilePhoto');
-        const logoImg = document.querySelector('.logo img');
-        
-        if (photoElement) {
-            photoElement.src = profilePhoto;
-        }
-        
-        if (logoImg) {
-            logoImg.src = profilePhoto;
-        }
+    return data;
+  }
+  
+  /**
+   * Download data as JSON file
+   */
+  function downloadJSON(data, filename) {
+    const jsonString = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    
+    // Clean up
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 100);
+  }
+  
+  /**
+   * Save content to localStorage
+   */
+  function saveContent(key, value) {
+    try {
+      localStorage.setItem(`portfolio_${key}`, value);
+    } catch (error) {
+      console.error('Error saving to localStorage:', error);
+      
+      // If the error is due to localStorage size limits (for large images)
+      if (error.name === 'QuotaExceededError') {
+        alert('Warning: The image may be too large to save in localStorage. Your changes might not persist after refreshing the page.');
+      }
     }
-}
+  }
+  
+  /**
+   * Get saved content from localStorage
+   */
+  function getSavedContent(key) {
+    try {
+      return localStorage.getItem(`portfolio_${key}`);
+    } catch (error) {
+      console.error('Error retrieving from localStorage:', error);
+      return null;
+    }
+  }
+  
+  /**
+   * Apply fade-in animation to admin elements
+   */
+  function fadeInAdminElements() {
+    const editIcons = document.querySelectorAll('.edit-icon');
+    
+    editIcons.forEach((icon, index) => {
+      icon.style.transition = 'opacity 0.3s ease';
+      icon.style.opacity = '0';
+      
+      setTimeout(() => {
+        icon.style.opacity = '1';
+      }, 100 + (index * 50));
+    });
+  }
