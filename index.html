@@ -3,293 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mohammad Abdul Faridajalal - Azure DevOps | SRE</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <title>Mohammad Abdul Faridajalal | Azure DevOps & SRE Engineer</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
+    <div class="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <!-- Header Section -->
     <header>
-        <div class="container">
-            <div class="logo">
-                <img src="./assets/profile.jpg" alt="Mohammad Abdul Faridajalal" id="logoImg" class="logo-img">
-                <span class="logo-text editable" data-field="logoText">Mohammad A. Farida</span>
+        <div class="profile-container">
+            <div class="profile-image-container">
+                <img id="profile-image" src="https://via.placeholder.com/150" alt="Mohammad Abdul Faridajalal">
+                <div class="image-upload-overlay" style="display: none;">
+                    <i class="fas fa-camera"></i>
+                    <input type="file" id="image-upload" accept="image/*">
+                </div>
             </div>
-            <nav>
-                <button class="mobile-menu-toggle">
-                    <span class="hamburger"></span>
-                </button>
-                <ul class="nav-menu">
-                    <li><a href="#home" class="nav-link">Home</a></li>
-                    <li><a href="#about" class="nav-link">About</a></li>
-                    <li><a href="#skills" class="nav-link">Skills</a></li>
-                    <li><a href="#projects" class="nav-link">Projects</a></li>
-                    <li><a href="#metrics" class="nav-link">Metrics</a></li>
-                    <li><a href="#" id="contactBtn" class="nav-link">Contact</a></li>
-                    <li>
-                        <button id="themeToggle" aria-label="Toggle dark/light mode">
-                            <i class="fas fa-moon"></i>
-                            <i class="fas fa-sun"></i>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
+            <div class="profile-info">
+                <h1 class="editable" data-field="name">Mohammad Abdul Faridajalal</h1>
+                <h2 class="editable" data-field="title">Azure DevOps Engineer & Site Reliability Engineer (SRE)</h2>
+                <p class="editable" data-field="location">Seattle, WA</p>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/faridajalalmd" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="mailto:faridajalal.dev@gmail.com"><i class="fas fa-envelope"></i></a>
+                    <a href="tel:+15551234567"><i class="fas fa-phone"></i></a>
+                </div>
+                <button id="contact-btn" class="contact-btn">Contact Me</button>
+            </div>
         </div>
     </header>
 
-    <section id="home" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1 class="editable" data-field="heroTitle">Mohammad Abdul Faridajalal</h1>
-                    <h2 class="editable" data-field="heroSubtitle">Azure DevOps Engineer & SRE Specialist</h2>
-                    <p class="editable" data-field="heroDescription">Experienced in cloud infrastructure, automation, and ensuring reliability at scale.</p>
-                    <div class="hero-cta">
-                        <a href="./assets/FaridaResume.pdf" class="btn primary" target="_blank">Download Resume</a>
-                        <a href="./assets/FaridaResume_ats.txt" class="btn secondary" target="_blank">ATS Version</a>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#about" class="nav-link active" data-section="about">About</a></li>
+            <li><a href="#experience" class="nav-link" data-section="experience">Experience</a></li>
+            <li><a href="#skills" class="nav-link" data-section="skills">Skills</a></li>
+            <li><a href="#metrics" class="nav-link" data-section="metrics">Metrics</a></li>
+            <li><a href="#certifications" class="nav-link" data-section="certifications">Certifications</a></li>
+            <li><a href="#education" class="nav-link" data-section="education">Education</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- About Section -->
+        <section id="about" class="section active">
+            <h2>About Me</h2>
+            <div class="editable" data-field="about">
+                <p>I am an experienced Azure DevOps & Site Reliability Engineer with a proven track record of building robust CI/CD pipelines, implementing infrastructure as code, and optimizing cloud resources for maximum efficiency and reliability.</p>
+                <p>My expertise spans across Azure, AWS, and GCP cloud platforms, with a strong focus on automation, monitoring, and maintaining high availability systems.</p>
+                <p>I am passionate about implementing DevOps best practices and enabling teams to deliver software faster and more reliably.</p>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="section">
+            <h2>Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="editable" data-field="exp1-title">Accenture (Shell)</h3>
+                        <span class="editable" data-field="exp1-date">2021–2023</span>
+                    </div>
+                    <div class="timeline-content editable" data-field="exp1-content">
+                        <ul>
+                            <li>Built CI/CD pipelines for 10+ microservices (60% faster)</li>
+                            <li>Azure monitoring → 40% better MTTR</li>
+                            <li>Terraform IaC → 75% deployment speed</li>
+                            <li>DR systems → 99.9% uptime</li>
+                        </ul>
                     </div>
                 </div>
-                <div class="hero-image">
-                    <div class="profile-container">
-                        <img id="profileImage" src="./assets/profile.jpg" alt="Mohammad Abdul Faridajalal" class="profile-img">
-                        <div id="profileUpload" class="profile-upload hidden">
-                            <label for="imageUpload">
-                                <i class="fas fa-camera"></i>
-                                <span>Update Photo</span>
-                            </label>
-                            <input type="file" id="imageUpload" accept="image/*">
-                        </div>
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="editable" data-field="exp2-title">Capgemini (HCSC)</h3>
+                        <span class="editable" data-field="exp2-date">2019–2021</span>
+                    </div>
+                    <div class="timeline-content editable" data-field="exp2-content">
+                        <ul>
+                            <li>Built dashboards → 35% faster incident response</li>
+                            <li>Auto-scaling → 50% better resource use</li>
+                            <li>Created runbooks</li>
+                            <li>Resolved production outages with minimal downtime</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="editable" data-field="exp3-title">Cognizant (Instagram)</h3>
+                        <span class="editable" data-field="exp3-date">2017–2019</span>
+                    </div>
+                    <div class="timeline-content editable" data-field="exp3-content">
+                        <ul>
+                            <li>Migrated apps to Azure → 30% lower infra cost</li>
+                            <li>Used Kubernetes for orchestration</li>
+                            <li>Built backup/restore automation</li>
+                            <li>Optimized cloud app performance</li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p class="editable" data-field="aboutText1">I'm a dedicated Azure DevOps engineer and Site Reliability Engineering (SRE) specialist with over 8 years of experience in the cloud infrastructure space. My focus is on optimizing deployment pipelines, enhancing system reliability, and implementing robust monitoring solutions.</p>
-                    <p class="editable" data-field="aboutText2">Having worked with enterprise-scale applications, I've developed expertise in containerization, infrastructure as code, and automated testing frameworks. My approach combines technical excellence with business-focused solutions to ensure maximum uptime and performance.</p>
-                </div>
-                <div class="about-stats">
-                    <div class="stat-item">
-                        <span class="stat-number editable" data-field="yearsExperience">8+</span>
-                        <span class="stat-label">Years Experience</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number editable" data-field="projectsCompleted">50+</span>
-                        <span class="stat-label">Projects Completed</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number editable" data-field="certificationsEarned">7</span>
-                        <span class="stat-label">Certifications</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2 class="section-title">Skills & Expertise</h2>
-            <div class="skills-content">
+        <!-- Skills Section -->
+        <section id="skills" class="section">
+            <h2>Skills</h2>
+            <div class="skills-container editable" data-field="skills">
                 <div class="skill-category">
-                    <h3>Cloud Platforms</h3>
-                    <ul class="skill-list">
-                        <li class="skill-item editable" data-field="skillCloud1">Azure (Expert)</li>
-                        <li class="skill-item editable" data-field="skillCloud2">AWS (Intermediate)</li>
-                        <li class="skill-item editable" data-field="skillCloud3">GCP (Beginner)</li>
-                    </ul>
+                    <h3>Cloud</h3>
+                    <div class="skills-list">
+                        <span>Azure</span>
+                        <span>AWS</span>
+                        <span>GCP</span>
+                    </div>
                 </div>
                 <div class="skill-category">
-                    <h3>DevOps Tools</h3>
-                    <ul class="skill-list">
-                        <li class="skill-item editable" data-field="skillDevOps1">Azure DevOps</li>
-                        <li class="skill-item editable" data-field="skillDevOps2">Jenkins</li>
-                        <li class="skill-item editable" data-field="skillDevOps3">GitHub Actions</li>
-                        <li class="skill-item editable" data-field="skillDevOps4">Terraform</li>
-                    </ul>
+                    <h3>CI/CD</h3>
+                    <div class="skills-list">
+                        <span>Azure DevOps</span>
+                        <span>Jenkins</span>
+                        <span>GitHub Actions</span>
+                        <span>Terraform</span>
+                    </div>
                 </div>
                 <div class="skill-category">
-                    <h3>Containers & Orchestration</h3>
-                    <ul class="skill-list">
-                        <li class="skill-item editable" data-field="skillContainers1">Docker</li>
-                        <li class="skill-item editable" data-field="skillContainers2">Kubernetes</li>
-                        <li class="skill-item editable" data-field="skillContainers3">AKS</li>
-                        <li class="skill-item editable" data-field="skillContainers4">Helm</li>
-                    </ul>
+                    <h3>Monitoring</h3>
+                    <div class="skills-list">
+                        <span>Prometheus</span>
+                        <span>Grafana</span>
+                        <span>Azure Monitor</span>
+                    </div>
                 </div>
                 <div class="skill-category">
-                    <h3>Monitoring & SRE</h3>
-                    <ul class="skill-list">
-                        <li class="skill-item editable" data-field="skillSRE1">Prometheus</li>
-                        <li class="skill-item editable" data-field="skillSRE2">Grafana</li>
-                        <li class="skill-item editable" data-field="skillSRE3">Azure Monitor</li>
-                        <li class="skill-item editable" data-field="skillSRE4">SLI/SLO Management</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2 class="section-title">Featured Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3 class="project-title editable" data-field="project1Title">Enterprise CI/CD Pipeline Modernization</h3>
-                    </div>
-                    <div class="project-body">
-                        <p class="project-description editable" data-field="project1Description">Redesigned the deployment pipeline for a large financial services client, reducing deployment time from days to hours while improving stability and enabling automated testing.</p>
-                        <div class="project-tech">
-                            <span class="tech-badge editable" data-field="project1Tech1">Azure DevOps</span>
-                            <span class="tech-badge editable" data-field="project1Tech2">Terraform</span>
-                            <span class="tech-badge editable" data-field="project1Tech3">PowerShell</span>
-                        </div>
+                    <h3>Scripting</h3>
+                    <div class="skills-list">
+                        <span>PowerShell</span>
+                        <span>Bash</span>
+                        <span>Python</span>
                     </div>
                 </div>
-
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3 class="project-title editable" data-field="project2Title">Cloud Migration & Containerization</h3>
-                    </div>
-                    <div class="project-body">
-                        <p class="project-description editable" data-field="project2Description">Led the migration of a legacy application portfolio to Azure, containerizing 15+ applications and implementing Kubernetes for orchestration with zero downtime.</p>
-                        <div class="project-tech">
-                            <span class="tech-badge editable" data-field="project2Tech1">AKS</span>
-                            <span class="tech-badge editable" data-field="project2Tech2">Docker</span>
-                            <span class="tech-badge editable" data-field="project2Tech3">Helm</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3 class="project-title editable" data-field="project3Title">SRE Implementation & Monitoring</h3>
-                    </div>
-                    <div class="project-body">
-                        <p class="project-description editable" data-field="project3Description">Established SRE practices for a healthcare client, implementing comprehensive monitoring, alerting, and incident response processes that reduced MTTR by 60%.</p>
-                        <div class="project-tech">
-                            <span class="tech-badge editable" data-field="project3Tech1">Prometheus</span>
-                            <span class="tech-badge editable" data-field="project3Tech2">Grafana</span>
-                            <span class="tech-badge editable" data-field="project3Tech3">Azure Monitor</span>
-                        </div>
+                <div class="skill-category">
+                    <h3>Containers</h3>
+                    <div class="skills-list">
+                        <span>Docker</span>
+                        <span>Kubernetes</span>
+                        <span>AKS</span>
+                        <span>Helm</span>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="metrics" class="metrics">
-        <div class="container">
-            <h2 class="section-title">DORA Metrics Performance</h2>
-            <p class="metrics-intro editable" data-field="metricsIntro">Track record of improving key DevOps Research and Assessment (DORA) metrics across projects:</p>
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <h3>Deployment Frequency</h3>
-                    <div class="chart-container">
-                        <canvas id="deploymentFrequencyChart"></canvas>
-                    </div>
+        <!-- Metrics Section -->
+        <section id="metrics" class="section">
+            <h2>DORA Metrics</h2>
+            <div class="charts-container">
+                <div class="chart-wrapper">
+                    <h3 class="editable" data-field="chart1-title">Deployment Frequency</h3>
+                    <canvas id="deploymentChart"></canvas>
                 </div>
-                <div class="metric-card">
-                    <h3>Lead Time for Changes</h3>
-                    <div class="chart-container">
-                        <canvas id="leadTimeChart"></canvas>
-                    </div>
+                <div class="chart-wrapper">
+                    <h3 class="editable" data-field="chart2-title">Lead Time for Changes</h3>
+                    <canvas id="leadTimeChart"></canvas>
                 </div>
-                <div class="metric-card">
-                    <h3>MTTR</h3>
-                    <div class="chart-container">
-                        <canvas id="mttrChart"></canvas>
-                    </div>
+                <div class="chart-wrapper">
+                    <h3 class="editable" data-field="chart3-title">MTTR</h3>
+                    <canvas id="mttrChart"></canvas>
                 </div>
-                <div class="metric-card">
-                    <h3>Change Failure Rate</h3>
-                    <div class="chart-container">
-                        <canvas id="changeFailureChart"></canvas>
-                    </div>
+                <div class="chart-wrapper">
+                    <h3 class="editable" data-field="chart4-title">Change Failure Rate</h3>
+                    <canvas id="failureRateChart"></canvas>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <span class="editable" data-field="footerName">Mohammad Abdul Faridajalal</span>
+        <!-- Certifications Section -->
+        <section id="certifications" class="section">
+            <h2>Certifications</h2>
+            <div class="certifications-container editable" data-field="certifications">
+                <div class="certification">
+                    <i class="fas fa-certificate"></i>
+                    <span>AZ-900, AZ-204, AZ-400, DP-203</span>
                 </div>
-                <div class="footer-links">
-                    <a href="https://github.com/" target="_blank" class="social-link editable" data-field="githubLink">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://linkedin.com/in/" target="_blank" class="social-link editable" data-field="linkedinLink">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="https://twitter.com/" target="_blank" class="social-link editable" data-field="twitterLink">
-                        <i class="fab fa-twitter"></i>
-                    </a>
+                <div class="certification">
+                    <i class="fas fa-certificate"></i>
+                    <span>Terraform Associate</span>
                 </div>
-                <div class="footer-copyright">
-                    <p class="editable" data-field="copyright">© 2025 Mohammad Abdul Faridajalal. All rights reserved.</p>
+                <div class="certification">
+                    <i class="fas fa-certificate"></i>
+                    <span>CyberArk Trustee</span>
                 </div>
             </div>
-        </div>
-    </footer>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="section">
+            <h2>Education</h2>
+            <div class="education-container">
+                <div class="education-item">
+                    <h3 class="editable" data-field="edu1-degree">Master's in Tech Management</h3>
+                    <p class="editable" data-field="edu1-school">University of Delaware</p>
+                    <p class="editable" data-field="edu1-year">2024</p>
+                </div>
+                <div class="education-item">
+                    <h3 class="editable" data-field="edu2-degree">B.Tech – ECE</h3>
+                    <p class="editable" data-field="edu2-school">JNTU</p>
+                    <p class="editable" data-field="edu2-year">2017</p>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Contact Modal -->
-    <div id="contactModal" class="modal">
+    <div id="contact-modal" class="modal">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Contact Information</h2>
+            <span class="close-btn">&times;</span>
+            <h2>Contact Me</h2>
             <div class="contact-info">
-                <div class="contact-item">
+                <div>
                     <i class="fas fa-envelope"></i>
-                    <span class="editable" data-field="emailAddress">mohammad.farida@example.com</span>
+                    <a href="mailto:faridajalal.dev@gmail.com" class="editable" data-field="email">faridajalal.dev@gmail.com</a>
                 </div>
-                <div class="contact-item">
+                <div>
                     <i class="fas fa-phone"></i>
-                    <span class="editable" data-field="phoneNumber">+1 (555) 123-4567</span>
+                    <a href="tel:+15551234567" class="editable" data-field="phone">+1 (555) 123-4567</a>
                 </div>
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span class="editable" data-field="location">Seattle, WA</span>
+                <div>
+                    <i class="fab fa-linkedin"></i>
+                    <a href="https://linkedin.com/in/faridajalalmd" target="_blank" class="editable" data-field="linkedin">linkedin.com/in/faridajalalmd</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Admin Tools Section -->
-    <div id="adminTools" class="admin-tools hidden">
-        <div class="admin-bar">
-            <div class="admin-notice">
-                <i class="fas fa-edit"></i> Admin Mode Active
-            </div>
-            <div class="admin-actions">
-                <button id="exportDataBtn" class="btn secondary">
-                    <i class="fas fa-download"></i> Export Data
-                </button>
-            </div>
-        </div>
+    <!-- Admin Mode Toolbar (Hidden by default) -->
+    <div id="admin-toolbar" class="admin-toolbar" style="display: none;">
+        <div class="admin-message">Admin Mode Active</div>
     </div>
 
-    <script src="./js/main.js"></script>
-    
-    <!-- Dynamic admin.js loader per non-negotiable requirement -->
-    <script>
-      if (window.location.search.includes("admin=true")) {
-        const script = document.createElement("script");
-        script.src = "./js/admin.js";
-        document.body.appendChild(script);
-        script.onload = () => {
-          if (typeof initializeAdmin === "function") {
-            initializeAdmin();
-          }
-        };
-      }
-    </script>
+    <!-- Main JS -->
+    <script src="main.js"></script>
 </body>
 </html>

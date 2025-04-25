@@ -1,260 +1,258 @@
 /**
- * admin.js - Admin functionality for Mohammad Abdul Faridajalal's portfolio
- * Only loaded when ?admin=true is in the URL
- * Handles inline editing, profile photo upload, and JSON export
+ * Admin Mode Functionality
+ * This script adds inline editing capabilities to the portfolio site.
+ * It's loaded dynamically when ?admin=true is in the URL.
  */
 
-// Initialize admin mode when function is called from main.js
+/**
+ * Initialize admin functionality
+ */
 function initializeAdmin() {
     console.log('Admin mode initialized');
     
-    // Show admin tools bar with animation
-    const adminTools = document.getElementById('adminTools');
-    adminTools.classList.remove('hidden');
+    // Add edit icons to all editable elements
+    addEditIcons();
     
-    // Initialize editable elements
-    initEditableElements();
-    
-    // Initialize profile photo upload
-    initProfileUpload();
-    
-    // Initialize export data functionality
-    initExportData();
-  }
-  
-  /**
-   * Initialize all editable elements with edit icons and data loading
-   */
-  function initEditableElements() {
+    // Add event listeners for edit icons
+    setupEditFunctionality();
+}
+
+/**
+ * Add edit icons to all editable elements
+ */
+function addEditIcons() {
     const editableElements = document.querySelectorAll('.editable');
     
-    editableElements.forEach((element, index) => {
-      // First load saved content if available
-      const fieldName = element.getAttribute('data-field');
-      if (fieldName) {
-        const savedContent = getSavedContent(fieldName);
+    editableElements.forEach(element => {
+        const editIcon = document.createElement('span');
+        editIcon.className = 'edit-icon';
+        editIcon.innerHTML = '✏️';
+        editIcon.title = 'Edit this content';
         
-        if (savedContent) {
-          if (element.tagName.toLowerCase() === 'img') {
-            element.src = savedContent;
-          } else {
-            element.textContent = savedContent;
-          }
-        }
-      }
-      
-      // Create edit icon with animation
-      const editIcon = document.createElement('span');
-      editIcon.className = 'edit-icon';
-      editIcon.innerHTML = '<i class="fas fa-pencil-alt"></i>';
-      
-      // Add staggered animation delay
-      setTimeout(() => {
-        editIcon.classList.add('edit-icon-animation');
-      }, 100 + (index * 50)); // Staggered animation
-      
-      // Add edit icon to element
-      element.appendChild(editIcon);
-      
-      // Add click handler for editing
-      editIcon.addEventListener('click', (e) => {
-        e.stopPropagation();
-        makeElementEditable(element);
-      });
-      
-      // Alternative: double-click on element to edit
-      element.addEventListener('dblclick', () => {
-        makeElementEditable(element);
-      });
+        element.appendChild(editIcon);
     });
-  }
-  
-  /**
-   * Make an element editable with proper inline editor
-   */
-  function makeElementEditable(element) {
-    // Prevent editing if already active
-    if (element.classList.contains('active')) return;
+}
+
+/**
+ * Setup event listeners for edit functionality
+ */
+function setupEditFunctionality() {
+    const editIcons = document.querySelectorAll('.edit-icon');
     
-    // Mark element as active
-    element.classList.add('active');
-    
-    // Get current content and field name
-    const currentContent = element.textContent;
+    editIcons.forEach(icon => {
+        icon.addEventListener('click', function() {
+            const editableElement = this.parentElement;
+            enterEditMode(editableElement);
+        });
+    });
+}
+
+/**
+ * Enter edit mode for an element
+ * @param {HTMLElement} element - The editable element
+ */
+function enterEditMode(element) {
+    // Store original content in case user cancels
+    const originalContent = element.innerHTML;
     const fieldName = element.getAttribute('data-field');
     
-    // Create inline editor container
-    const editorContainer = document.createElement('div');
-    editorContainer.className = 'inline-editor';
-    
-    // Create input based on element type
+    // Create appropriate input based on element type
     let inputElement;
+    let formattedContent = originalContent.replace(/<div class="edit-icon">.*?<\/div>/, '');
     
-    if (element.tagName.toLowerCase() === 'p' || currentContent.length > 60) {
-      // For longer text, use textarea
-      inputElement = document.createElement('textarea');
-      inputElement.rows = 4;
-      inputElement.value = currentContent;
+    if (element.tagName === 'H1' || element.tagName === 'H2' || element.tagName === 'H3' || 
+        element.tagName === 'P' || element.tagName === 'SPAN' || element.tagName === 'A') {
+        // Create input for simple text elements
+        inputElement = document.createElement('input');
+        inputElement.type = 'text';
+        inputElement.className = 'edit-input';
+        inputElement.value = element.textContent.trim();
     } else {
-      // For shorter text, use input
-      inputElement = document.createElement('input');
-      inputElement.type = 'text';
-      inputElement.value = currentContent;
+        // Create textarea for complex content
+        inputElement = document.createElement('textarea');
+        inputElement.className = 'edit-textarea';
+        
+        // Remove edit icon from content
+        formattedContent = formattedContent.replace(/<span class="edit-icon">.*?<\/span>/, '');
+        
+        // Set content to textarea
+        inputElement.value = element.textContent.trim();
     }
     
-    // Create action buttons
-    const actionsDiv = document.createElement('div');
-    actionsDiv.className = 'editor-actions';
+    // Create form container
+    const formContainer = document.createElement('div');
+    formContainer.className = 'edit-form';
+    formContainer.appendChild(inputElement);
     
-    const saveButton = document.createElement('button');
-    saveButton.className = 'editor-btn save-btn';
-    saveButton.textContent = 'Save';
+    // Create save icon
+    const saveIcon = document.createElement('span');
+    saveIcon.className = 'save-icon';
+    saveIcon.innerHTML = '✓';
+    saveIcon.title = 'Save changes';
+    formContainer.appendChild(saveIcon);
     
-    const cancelButton = document.createElement('button');
-    cancelButton.className = 'editor-btn cancel-btn';
-    cancelButton.textContent = 'Cancel';
-    
-    // Add elements to container
-    editorContainer.appendChild(inputElement);
-    actionsDiv.appendChild(saveButton);
-    actionsDiv.appendChild(cancelButton);
-    editorContainer.appendChild(actionsDiv);
-    
-    // Clear element content and add inline editor
-    const originalContent = element.innerHTML;
+    // Replace element content with form
     element.innerHTML = '';
-    element.appendChild(editorContainer);
+    element.appendChild(formContainer);
     
-    // Focus the input
+    // Focus on input
     inputElement.focus();
     
-    // Handle save button click
-    saveButton.addEventListener('click', () => {
-      saveEdit(element, inputElement.value, fieldName, originalContent);
+    // Handle save action
+    saveIcon.addEventListener('click', function() {
+        saveChanges(element, inputElement, fieldName);
     });
     
-    // Handle cancel button click
-    cancelButton.addEventListener('click', () => {
-      cancelEdit(element, originalContent);
+    // Handle enter key to save
+    inputElement.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            if (inputElement.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                saveChanges(element, inputElement, fieldName);
+            }
+        } else if (e.key === 'Escape') {
+            // Cancel edit and restore original content
+            element.innerHTML = originalContent;
+        }
     });
     
-    // Handle Enter key for inputs (not for textarea)
-    inputElement.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && inputElement.tagName.toLowerCase() !== 'textarea') {
-        e.preventDefault();
-        saveEdit(element, inputElement.value, fieldName, originalContent);
-      }
-      if (e.key === 'Escape') {
-        cancelEdit(element, originalContent);
-      }
+    // Handle blur (clicking outside) to save
+    inputElement.addEventListener('blur', function(e) {
+        // Check if the related target is the save icon
+        // Only save if clicking outside both input and save icon
+        if (!e.relatedTarget || !e.relatedTarget.classList.contains('save-icon')) {
+            // Small delay to allow clicking save icon
+            setTimeout(() => {
+                if (element.contains(inputElement)) {
+                    saveChanges(element, inputElement, fieldName);
+                }
+            }, 200);
+        }
     });
-  }
-  
-  /**
-   * Save edits to an element and update storage
-   */
-  function saveEdit(element, newContent, fieldName, originalHtml) {
-    // Remove the inline editor
-    element.innerHTML = '';
+}
+
+/**
+ * Save changes to an editable element
+ * @param {HTMLElement} element - The editable element
+ * @param {HTMLElement} input - The input/textarea element
+ * @param {string} fieldName - The data-field attribute value
+ */
+function saveChanges(element, input, fieldName) {
+    let newContent = input.value;
+    let originalTagName = element.tagName.toLowerCase();
     
-    // Update the element content
-    element.textContent = newContent;
-    
-    // Re-create and add the edit icon
-    const editIcon = document.createElement('span');
-    editIcon.className = 'edit-icon';
-    editIcon.innerHTML = '<i class="fas fa-pencil-alt"></i>';
-    element.appendChild(editIcon);
-    
-    // Add click handler for editing
-    editIcon.addEventListener('click', (e) => {
-      e.stopPropagation();
-      makeElementEditable(element);
-    });
+    // Format content based on element type
+    if (element.tagName === 'H1' || element.tagName === 'H2' || element.tagName === 'H3' || 
+        element.tagName === 'P' || element.tagName === 'SPAN' || element.tagName === 'A') {
+        element.textContent = newContent;
+    } else {
+        // Handle complex content (like lists, etc.)
+        if (element.innerHTML.includes('<ul>')) {
+            // Convert text with line breaks to list items
+            const lines = newContent.split('\n');
+            let formattedContent = '<ul>';
+            
+            lines.forEach(line => {
+                if (line.trim()) {
+                    formattedContent += `<li>${line.trim()}</li>`;
+                }
+            });
+            
+            formattedContent += '</ul>';
+            element.innerHTML = formattedContent;
+        } else if (element.className.includes('skills-container')) {
+            // Special handling for skills section
+            processSkillsContent(element, newContent);
+            
+            // Add edit icon back
+            addEditIcon(element);
+            return; // Already handled adding edit icon
+        } else {
+            // Default formatting for regular text
+            const lines = newContent.split('\n');
+            let formattedContent = '';
+            
+            lines.forEach(line => {
+                if (line.trim()) {
+                    formattedContent += `<p>${line.trim()}</p>`;
+                }
+            });
+            
+            element.innerHTML = formattedContent;
+        }
+    }
     
     // Save to localStorage
-    saveContent(fieldName, newContent);
+    localStorage.setItem(`portfolio_${fieldName}`, element.innerHTML);
     
-    // Remove active class
-    element.classList.remove('active');
+    // Add edit icon back
+    addEditIcon(element);
+}
+
+/**
+ * Process skills content
+ * @param {HTMLElement} element - The skills container element
+ * @param {string} content - The user input content
+ */
+function processSkillsContent(element, content) {
+    const lines = content.split('\n');
+    let currentCategory = null;
+    let formattedContent = '';
     
-    // Update logo text in page title if needed
-    if (fieldName === 'logoText') {
-      updatePageTitle(newContent);
-    }
-  }
-  
-  /**
-   * Cancel edit and restore original content
-   */
-  function cancelEdit(element, originalHtml) {
-    // Restore original content with edit icon
-    element.innerHTML = originalHtml;
-    
-    // Reattach edit icon event listener
-    const editIcon = element.querySelector('.edit-icon');
-    if (editIcon) {
-      editIcon.addEventListener('click', (e) => {
-        e.stopPropagation();
-        makeElementEditable(element);
-      });
-    }
-    
-    // Remove active class
-    element.classList.remove('active');
-  }
-  
-  /**
-   * Update page title if logo text changes
-   */
-  function updatePageTitle(newTitle) {
-    if (newTitle) {
-      document.title = newTitle + ' - Azure DevOps | SRE';
-    }
-  }
-  
-  /**
-   * Initialize profile photo upload functionality
-   */
-  function initProfileUpload() {
-    const profileUploadDiv = document.getElementById('profileUpload');
-    const imageUploadInput = document.getElementById('imageUpload');
-    const profileImage = document.getElementById('profileImage');
-    const logoImg = document.getElementById('logoImg');
-    
-    // Show the upload button
-    profileUploadDiv.classList.remove('hidden');
-    
-    // Load saved profile image if available
-    const savedProfileImage = getSavedContent('profileImage');
-    if (savedProfileImage) {
-      if (profileImage) profileImage.src = savedProfileImage;
-      if (logoImg) logoImg.src = savedProfileImage;
-    }
-    
-    // Handle file input change
-    imageUploadInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      
-      if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
+    lines.forEach(line => {
+        line = line.trim();
         
-        reader.onload = function(event) {
-          const imageData = event.target.result;
-          
-          // Update main profile image
-          profileImage.src = imageData;
-          
-          // Update logo image if it exists
-          if (logoImg) logoImg.src = imageData;
-          
-          // Save to localStorage
-          saveContent('profileImage', imageData);
-        };
+        if (!line) return;
         
-        reader.readAsDataURL(file);
-      } else {
-        alert('Please select a valid image file.');
-      }
+        if (line.endsWith(':')) {
+            // This is a category heading
+            if (currentCategory) {
+                formattedContent += '</div></div>';
+            }
+            
+            const categoryName = line.slice(0, -1);
+            formattedContent += `<div class="skill-category">
+                <h3>${categoryName}</h3>
+                <div class="skills-list">`;
+            
+            currentCategory = categoryName;
+        } else {
+            // This is a skill
+            if (currentCategory) {
+                formattedContent += `<span>${line}</span>`;
+            } else {
+                // If no category has been defined yet, create a default one
+                formattedContent += `<div class="skill-category">
+                    <h3>Skills</h3>
+                    <div class="skills-list">
+                    <span>${line}</span>`;
+                currentCategory = 'Skills';
+            }
+        }
     });
-  }
+    
+    // Close the last category
+    if (currentCategory) {
+        formattedContent += '</div></div>';
+    }
+    
+    element.innerHTML = formattedContent;
+}
+
+/**
+ * Add edit icon back to element after editing
+ * @param {HTMLElement} element - The editable element
+ */
+function addEditIcon(element) {
+    const editIcon = document.createElement('span');
+    editIcon.className = 'edit-icon';
+    editIcon.innerHTML = '✏️';
+    editIcon.title = 'Edit this content';
+    
+    element.appendChild(editIcon);
+    
+    // Add event listener to new edit icon
+    editIcon.addEventListener('click', function() {
+        enterEditMode(element);
+    });
+}
