@@ -679,34 +679,115 @@
   /* Editable elements */
   .editable {
     position: relative;
-    transition: background-color 0.3s;
+    padding-right: 5px; /* Space for edit icon */
+  }
+  
+  .editable .edit-icon {
+    position: absolute;
+    right: -22px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+  }
+  
+  .editable:hover .edit-icon {
+    opacity: 1;
   }
   
   .editable.active {
     outline: 2px solid var(--primary-color);
-    background-color: rgba(0, 120, 212, 0.1);
+    background-color: rgba(0, 120, 212, 0.05);
+    border-radius: 3px;
   }
   
-  .edit-icon {
-    display: none;
-    position: absolute;
-    right: -25px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--primary-color);
+  /* Inline editor styles */
+  .inline-editor {
+    position: relative;
+    width: 100%;
+    margin: 5px 0;
+  }
+  
+  .inline-editor input,
+  .inline-editor textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--text-primary);
     background-color: var(--bg-primary);
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    line-height: 20px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    z-index: 100;
+    resize: vertical;
   }
   
-  .editable:hover .edit-icon {
-    display: block;
+  .inline-editor textarea {
+    min-height: 80px;
+  }
+  
+  .inline-editor .editor-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  
+  .inline-editor .editor-btn {
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  
+  .inline-editor .save-btn {
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+  }
+  
+  .inline-editor .save-btn:hover {
+    background-color: var(--success-color);
+    opacity: 0.9;
+  }
+  
+  .inline-editor .cancel-btn {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+  }
+  
+  .inline-editor .cancel-btn:hover {
+    background-color: var(--bg-accent);
+  }
+  
+  /* Animation for edit icons */
+  @keyframes fadeInEditIcon {
+    from {
+      opacity: 0;
+      transform: translateY(-50%) scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+  }
+  
+  .edit-icon-animation {
+    animation: fadeInEditIcon 0.3s ease forwards;
   }
   
   /* Utility classes */
@@ -740,6 +821,10 @@
     
     .stat-item {
       flex: 1 1 30%;
+    }
+    
+    .editable .edit-icon {
+      right: -15px; /* Adjust position for smaller screens */
     }
   }
   
@@ -784,6 +869,12 @@
     section {
       padding: 60px 0;
     }
+    
+    .editable .edit-icon {
+      top: 0;
+      right: 0;
+      transform: none;
+    }
   }
   
   @media (max-width: 480px) {
@@ -811,5 +902,13 @@
     .btn {
       width: 100%;
       text-align: center;
+    }
+    
+    .inline-editor .editor-actions {
+      flex-direction: column;
+    }
+    
+    .inline-editor .editor-btn {
+      width: 100%;
     }
   }

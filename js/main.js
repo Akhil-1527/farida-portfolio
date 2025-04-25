@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize charts
     initCharts();
+    
+    // Load profile image from localStorage if available (for non-admin view)
+    loadProfileImage();
   });
   
   /**
@@ -91,6 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactModal = document.getElementById('contactModal');
     const closeBtn = document.querySelector('.close-modal');
     
+    if (!contactBtn || !contactModal || !closeBtn) return;
+    
     contactBtn.addEventListener('click', (e) => {
       e.preventDefault();
       contactModal.classList.add('show');
@@ -144,6 +149,50 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
+  }
+  
+  /**
+   * Load profile image from localStorage for non-admin view
+   */
+  function loadProfileImage() {
+    const savedProfileImage = localStorage.getItem('portfolio_profileImage');
+    if (savedProfileImage) {
+      const profileImage = document.getElementById('profileImage');
+      const logoImg = document.getElementById('logoImg');
+      
+      if (profileImage) profileImage.src = savedProfileImage;
+      if (logoImg) logoImg.src = savedProfileImage;
+    }
+    
+    // Load editable content from localStorage for non-admin view
+    loadEditableContent();
+  }
+  
+  /**
+   * Load editable content from localStorage for non-admin view
+   */
+  function loadEditableContent() {
+    const editableElements = document.querySelectorAll('.editable');
+    
+    editableElements.forEach(element => {
+      const fieldName = element.getAttribute('data-field');
+      if (!fieldName) return;
+      
+      const savedContent = localStorage.getItem(`portfolio_${fieldName}`);
+      if (savedContent) {
+        if (element.tagName.toLowerCase() === 'img') {
+          element.src = savedContent;
+        } else {
+          element.textContent = savedContent;
+        }
+      }
+    });
+    
+    // Update page title if logoText was changed
+    const logoText = localStorage.getItem('portfolio_logoText');
+    if (logoText) {
+      document.title = `${logoText} - Azure DevOps | SRE`;
+    }
   }
   
   /**
@@ -239,7 +288,10 @@ document.addEventListener('DOMContentLoaded', () => {
    * Create Deployment Frequency Chart
    */
   function createDeploymentFrequencyChart(data, options) {
-    const ctx = document.getElementById('deploymentFrequencyChart').getContext('2d');
+    const canvas = document.getElementById('deploymentFrequencyChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
     
     // Check if chart already exists and destroy it
     if (window.deploymentFrequencyChart) {
@@ -287,7 +339,10 @@ document.addEventListener('DOMContentLoaded', () => {
    * Create Lead Time for Changes Chart
    */
   function createLeadTimeChart(data, options) {
-    const ctx = document.getElementById('leadTimeChart').getContext('2d');
+    const canvas = document.getElementById('leadTimeChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
     
     // Check if chart already exists and destroy it
     if (window.leadTimeChart) {
@@ -337,7 +392,10 @@ document.addEventListener('DOMContentLoaded', () => {
    * Create Mean Time to Recovery Chart
    */
   function createMTTRChart(data, options) {
-    const ctx = document.getElementById('mttrChart').getContext('2d');
+    const canvas = document.getElementById('mttrChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
     
     // Check if chart already exists and destroy it
     if (window.mttrChart) {
@@ -387,7 +445,10 @@ document.addEventListener('DOMContentLoaded', () => {
    * Create Change Failure Rate Chart
    */
   function createChangeFailureChart(data, options) {
-    const ctx = document.getElementById('changeFailureChart').getContext('2d');
+    const canvas = document.getElementById('changeFailureChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
     
     // Check if chart already exists and destroy it
     if (window.changeFailureChart) {
