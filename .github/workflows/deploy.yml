@@ -1,4 +1,4 @@
-name: Deploy to S3
+name: Debug AWS Key Access
 
 on:
   push:
@@ -6,20 +6,16 @@ on:
       - main
 
 jobs:
-  deploy:
+  debug:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Sync files to S3
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --delete
+      - name: Print access key if it exists
         env:
-          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          SOURCE_DIR: './'
+        run: |
+          if [ -z "$AWS_ACCESS_KEY_ID" ]; then
+            echo "❌ AWS_ACCESS_KEY_ID is NOT available!"
+            exit 1
+          else
+            echo "✅ AWS_ACCESS_KEY_ID is accessible: $AWS_ACCESS_KEY_ID"
+          fi
