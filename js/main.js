@@ -13,6 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Setup DORA metrics charts
     setupDoraCharts();
+    
+    // Set the RGB values for backgrounds
+    updateRgbValues();
+    
+    // Setup navigation highlight
+    highlightActiveNavItem();
+    
+    // Setup navbar scroll effect
+    setupNavbarScroll();
 });
 
 // Theme Toggle
@@ -25,7 +34,16 @@ function setupThemeToggle() {
         // Save preference to localStorage
         const isDarkTheme = document.body.classList.contains('dark-theme');
         localStorage.setItem('portfolio_dark_theme', isDarkTheme);
+        
+        // Update RGB values for background
+        updateRgbValues();
     });
+}
+
+// Update RGB values based on theme
+function updateRgbValues() {
+    const isDarkTheme = document.body.classList.contains('dark-theme');
+    document.documentElement.style.setProperty('--card-bg-rgb', isDarkTheme ? '30, 30, 30' : '255, 255, 255');
 }
 
 // Load Theme Preference
@@ -257,5 +275,43 @@ function updateChartColors() {
         chart.options.scales.y.ticks.color = textColor;
         chart.options.scales.x.ticks.color = textColor;
         chart.update();
+    });
+}
+
+// Highlight active navigation item
+function highlightActiveNavItem() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-right a[href^="#"]');
+    
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY + 100;
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+            
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${sectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    });
+}
+
+// Setup navbar scroll effect
+function setupNavbarScroll() {
+    const navbar = document.querySelector('.navbar');
+    
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
     });
 }

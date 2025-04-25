@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     // Check if admin mode is enabled via URL parameter
     checkAdminMode();
@@ -72,8 +71,12 @@ function handleEditClick(event) {
         }
     });
 
-    input.addEventListener('blur', () => {
-        saveEditedContent(element, input.value, fieldName);
+    input.addEventListener('blur', (e) => {
+        // Only save on blur if the click wasn't on the save button
+        // This prevents double-saving and resolves a race condition
+        if (!e.relatedTarget || e.relatedTarget !== saveBtn) {
+            saveEditedContent(element, input.value, fieldName);
+        }
     });
 }
 
@@ -81,6 +84,15 @@ function handleEditClick(event) {
 function saveEditedContent(element, newContent, fieldName) {
     element.innerHTML = newContent;
     localStorage.setItem(`portfolio_${fieldName}`, newContent);
+    
+    // If this is a contact info item, update the corresponding contact modal item
+    if (fieldName === 'email' || fieldName === 'phone' || fieldName === 'linkedin') {
+        const contactField = document.querySelector(`.editable[data-field="contact-${fieldName}"]`);
+        if (contactField) {
+            contactField.textContent = newContent;
+            localStorage.setItem(`portfolio_contact-${fieldName}`, newContent);
+        }
+    }
 }
 
 // Setup photo edit logic
@@ -118,5 +130,12 @@ function setupPhotoEdit() {
             photoModal.style.display = 'none';
         };
         reader.readAsDataURL(file);
+    });
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', (event) => {
+        if (event.target === photoModal) {
+            photoModal.style.display = 'none';
+        }
     });
 }
