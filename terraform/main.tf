@@ -19,7 +19,10 @@ terraform {
     }
   }
   
+  # Make sure to replace "your-terraform-state-bucket" with your actual bucket name
   backend "s3" {
-    key = "farida-portfolio/terraform.tfstate"
+    bucket = "farida-portfolio-terraform-state"
+    key    = "farida-portfolio/terraform.tfstate"
+    region = "us-east-1"
   }
 }

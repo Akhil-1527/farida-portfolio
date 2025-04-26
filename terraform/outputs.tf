@@ -42,11 +42,15 @@ output "deployment_instructions" {
        - clientId: ${aws_cognito_user_pool_client.portfolio_client.id}
        - identityPoolId: ${aws_cognito_identity_pool.portfolio.id}
        - bucketName: ${aws_s3_bucket.assets.bucket}
+       - contentTableName: ${aws_dynamodb_table.portfolio_content.name}
 
     2. Build and deploy your website files:
        $ aws s3 sync ./public/ s3://${aws_s3_bucket.website.bucket}/ --delete
 
     3. Access your website at:
        https://${aws_cloudfront_distribution.website.domain_name}
+
+    4. When first accessing the admin portal, use the temporary password 'Temp123!'
+       You will be prompted to set a new password.
   EOT
 }

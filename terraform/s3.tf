@@ -31,30 +31,6 @@ resource "aws_s3_bucket_website_configuration" "website" {
   }
 }
 
-# Allow CloudFront to access S3
-resource "aws_s3_bucket_policy" "website" {
-  bucket = aws_s3_bucket.website.id
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid       = "AllowCloudFrontServicePrincipal"
-        Effect    = "Allow"
-        Principal = {
-          Service = "cloudfront.amazonaws.com"
-        }
-        Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.website.arn}/*"
-        Condition = {
-          StringEquals = {
-            "AWS:SourceArn" = aws_cloudfront_distribution.website.arn
-          }
-        }
-      }
-    ]
-  })
-}
-
 # Assets S3 Bucket (for profile photos, images)
 resource "aws_s3_bucket" "assets" {
   bucket = "${var.project_name}-assets-${var.environment}"
@@ -89,10 +65,18 @@ resource "aws_s3_bucket_cors_configuration" "assets" {
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["GET", "PUT", "POST", "DELETE", "HEAD"]
-    allowed_origins = var.domain_name != "" ? ["https://${var.domain_name}"] : [aws_cloudfront_distribution.website.domain_name]
+    allowed_origins = ["*"]  # This will be updated with the CloudFront domain in a separate resource
     expose_headers  = ["ETag"]
     max_age_seconds = 3000
   }
+}
+
+# CloudFront Origin Access Control (OAC) for CloudFront
+resource "aws_cloudfront_origin_access_control" "default" {
+  name                              = "${var.project_name}-${var.environment}-oac"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
 
 # CloudFront Distribution for Website
@@ -144,10 +128,41 @@ resource "aws_cloudfront_distribution" "website" {
   }
 }
 
-# Origin Access Control (OAC) for CloudFront
-resource "aws_cloudfront_origin_access_control" "default" {
-  name                              = "${var.project_name}-${var.environment}-oac"
-  origin_access_control_origin_type = "s3"
-  signing_behavior                  = "always"
-  signing_protocol                  = "sigv4"
+# Update CORS after CloudFront is created
+resource "aws_s3_bucket_cors_configuration" "assets_with_cloudfront" {
+  depends_on = [aws_cloudfront_distribution.website]
+  bucket = aws_s3_bucket.assets.id
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "PUT", "POST", "DELETE", "HEAD"]
+    allowed_origins = var.domain_name != "" ? ["https://${var.domain_name}"] : ["https://${aws_cloudfront_distribution.website.domain_name}"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+}
+
+# Allow CloudFront to access S3 - apply after CloudFront is created
+resource "aws_s3_bucket_policy" "website" {
+  depends_on = [aws_cloudfront_distribution.website]
+  bucket = aws_s3_bucket.website.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "AllowCloudFrontServicePrincipal"
+        Effect    = "Allow"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
+        Action    = "s3:GetObject"
+        Resource  = "${aws_s3_bucket.website.arn}/*"
+        Condition = {
+          StringEquals = {
+            "AWS:SourceArn" = aws_cloudfront_distribution.website.arn
+          }
+        }
+      }
+    ]
+  })
 }
