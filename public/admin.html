@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Portal - Mohammad Abdul Faridajalal Portfolio">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Portal | Mohammad Abdul Faridajalal</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../src/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-page loading">
+    <!-- Loading Spinner -->
+    <div class="page-loader">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+        <p>Loading Admin Portal...</p>
+    </div>
+
+    <!-- Main Admin Content -->
+    <div id="admin-app">
+        <!-- This will be populated by JavaScript -->
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="success-toast" class="toast toast-success">
+        <div class="toast-content">
+            <i class="toast-icon fas fa-check-circle"></i>
+            <div class="toast-message">Success message goes here</div>
+            <button class="toast-close">&times;</button>
+        </div>
+    </div>
+
+    <div id="error-toast" class="toast toast-error">
+        <div class="toast-content">
+            <i class="toast-icon fas fa-exclamation-circle"></i>
+            <div class="toast-message">Error message goes here</div>
+            <button class="toast-close">&times;</button>
+        </div>
+    </div>
+
+    <!-- AWS SDK -->
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1099.0.min.js"></script>
+    <script src="https://unpkg.com/amazon-cognito-identity-js@5.2.10/dist/amazon-cognito-identity.min.js"></script>
+    
+    <!-- Admin Scripts -->
+    <script type="module" src="../src/js/pages/admin.js"></script>
+</body>
+</html>
